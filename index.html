@@ -1279,7 +1279,7 @@
             `;
             uploadedFilesList.innerHTML = '';
             uploadedFilesList.appendChild(loadingItem);
-            
+
             // Load both datasets
             Promise.all([
                 fetch(CZI_MELTED_DATA_URL).then(response => {
@@ -1302,50 +1302,58 @@
                 if (!minMaxCsv || typeof minMaxCsv !== 'string') {
                     throw new Error('Invalid min/max data response');
                 }
-                
+
                 // Parse the CSVs
                 const meltedResults = Papa.parse(meltedCsv, {
                     header: true,
                     dynamicTyping: true,
                     skipEmptyLines: true
                 });
-                
+
                 const minMaxResults = Papa.parse(minMaxCsv, {
                     header: true,
                     dynamicTyping: true,
                     skipEmptyLines: true
                 });
-                
+
                 // Check if parsing was successful
                 if (!meltedResults.data || !meltedResults.meta || !meltedResults.meta.fields) {
                     throw new Error('Failed to parse melted data CSV');
                 }
-                
+
                 if (!minMaxResults.data || !minMaxResults.meta || !minMaxResults.meta.fields) {
                     throw new Error('Failed to parse min/max data CSV');
                 }
-                
-                // Process the data
+
+                // Process the melted data
                 processMeltedData(meltedResults.data);
-                processMinMaxData(minMaxResults.data, minMaxResults.meta.fields);
-                
+
+                // Check if MinMax data needs to be transposed - THIS IS THE FIX
+                const shouldTranspose = determineIfTransposeNeeded(minMaxResults);
+                if (shouldTranspose) {
+                    const transposed = transposeCSV(minMaxResults.data, minMaxResults.meta.fields);
+                    processMinMaxData(transposed.data, transposed.fields);
+                } else {
+                    processMinMaxData(minMaxResults.data, minMaxResults.meta.fields);
+                }
+
                 // Update UI
                 updateUI();
-                
+
                 // Update loading indicator
                 loadingItem.innerHTML = `
                     <span><i class="fas fa-check-circle text-success me-2"></i>CZI CELLxGENE data loaded successfully</span>
                 `;
-                
+
                 showNotification('CZI CELLxGENE data loaded successfully', 'success', 'bottom-right');
             }).catch(error => {
                 console.error('Error loading CZI CELLxGENE data:', error);
-                
+
                 // Update loading indicator to show error
                 loadingItem.innerHTML = `
                     <span><i class="fas fa-times-circle text-danger me-2"></i>Error loading CZI CELLxGENE data: ${error.message}</span>
                 `;
-                
+
                 showNotification('Error loading CZI CELLxGENE data: ' + error.message, 'warning', 'bottom-right');
             });
         }
