@@ -17,11 +17,11 @@
     
     <style>
         :root {
-            --primary-color: #6200ee;
-            --secondary-color: #03dac6;
+            --primary-color: #0066cc;
+            --secondary-color: #00aeef;
             --bg-color: #f5f5f5;
             --text-color: #333;
-            --hover-color: #bb86fc;
+            --hover-color: #3399ff;
             --border-color: #ddd;
         }
         
@@ -157,13 +157,13 @@
             padding: 30px;
             text-align: center;
             margin-bottom: 20px;
-            background-color: rgba(98, 0, 238, 0.05);
+            background-color: rgba(200, 200, 200, 0.2);
             transition: all 0.3s ease;
         }
         
         .upload-area:hover {
             border-color: var(--primary-color);
-            background-color: rgba(98, 0, 238, 0.1);
+            background-color: rgba(200, 200, 200, 0.4);
         }
         
         .upload-icon {
@@ -214,8 +214,8 @@
         
         /* Load sample data button */
         .load-sample-btn {
-            background-color: var(--secondary-color);
-            color: #333;
+            background-color: #24292e;
+            color: #fff;
             border: none;
             padding: 10px 20px;
             border-radius: 4px;
@@ -226,7 +226,7 @@
         }
         
         .load-sample-btn:hover {
-            background-color: #02c5ae;
+            background-color: #555;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
@@ -735,6 +735,9 @@
                                 <div class="color-palette-container">
                                     <label for="color-palette" class="color-palette-label">Color Palette:</label>
                                     <select id="color-palette" class="form-select color-palette-select">
+                                        <option value="interpolateBlues">
+                                            <span class="palette-preview palette-preview-blues"></span>Blues
+                                        </option>
                                         <option value="interpolateRdPu">
                                             <span class="palette-preview palette-preview-rdpu"></span>Purple (RdPu)
                                         </option>
@@ -749,9 +752,6 @@
                                         </option>
                                         <option value="interpolatePlasma">
                                             <span class="palette-preview palette-preview-plasma"></span>Plasma
-                                        </option>
-                                        <option value="interpolateBlues">
-                                            <span class="palette-preview palette-preview-blues"></span>Blues
                                         </option>
                                         <option value="interpolateGreens">
                                             <span class="palette-preview palette-preview-greens"></span>Greens
@@ -825,7 +825,7 @@
                 </div>
                 <div class="col-md-6">
                     <!-- REPLACE: Update with actual hosting/sponsor information -->
-                    <p>Hosted by <a href="https://www.sanger.ac.uk/">Wellcome Sanger Institute</a> | <a href="#">Terms and Conditions</a></p>
+                    <p>Hosted by <a href="https://www.sanger.ac.uk/">Wellcome Sanger Institute</a> | <a href="http://www.sanger.ac.uk/legal/">Terms and Conditions</a> | <a href="http://www.sanger.ac.uk/legal/cookiespolicy.html">Cookies Policy</a></p>
                 </div>
             </div>
         </div>
@@ -853,7 +853,7 @@
         let minMaxHeaders = []; // Store detected column headers
         let svgElement = null; // Store reference to the SVG element
         let heatmapGroup = null; // Store reference to the group that will be zoomed
-        let selectedColorPalette = "interpolateRdPu"; // Default color palette
+        let selectedColorPalette = "interpolateBlues"; // Default color palette
         
         // URLs for the CZI CELLxGENE data files
         const CZI_MELTED_DATA_URL = "https://raw.githubusercontent.com/ventolab/sccellfie-website/refs/heads/main/data/CELLxGENEMetabolicTasksMeltedResults.csv";
