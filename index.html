@@ -1,0 +1,2292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metabolic Task Visualization</title>
+    <!-- Load D3.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <!-- Load PapaParse for CSV parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <!-- Load Lodash -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #6200ee;
+            --secondary-color: #03dac6;
+            --bg-color: #f5f5f5;
+            --text-color: #333;
+            --hover-color: #bb86fc;
+            --border-color: #ddd;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            padding-bottom: 70px; /* Just need padding for the info panel */
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        .container-fluid {
+            padding: 20px;
+        }
+        
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            margin-bottom: 10px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 1001; /* Higher than info-panel (1000) */
+        }
+
+        /* Add padding to the main content to prevent it from being hidden behind the fixed header */
+        .container-fluid {
+            padding-top: 160px; /* Adjust based on your header height */
+        }
+
+        /* Only apply padding to the main container, not the one inside the header */
+        header .container-fluid {
+            padding-top: 20px; /* Reset for the container inside the header */
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: flex-start; /* Align items to the top */
+            justify-content: space-between; /* Space between logo and download button */
+        }
+        
+        .logo-title-container {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .logo {
+            height: 80px;
+            margin-right: 15px;
+            transform: translateY(-12px); /* Shift logo down without affecting layout */
+        }
+
+        .app-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin: 0;
+            align-self: center; /* Center the title vertically */
+        }
+        
+        .header-buttons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .download-data-btn {
+            align-self: center;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .download-data-btn:hover {
+            background-color: var(--hover-color);
+        }
+        
+        .github-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: #24292e;
+            color: white;
+            border-radius: 4px;
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .github-btn:hover {
+            background-color: #555;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            border: none;
+        }
+        
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+            border-radius: 8px 8px 0 0 !important;
+            padding: 12px 20px;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 5px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: rgba(98, 0, 238, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .upload-area:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(98, 0, 238, 0.1);
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .upload-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 8px 20px;
+            font-weight: 500;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--hover-color);
+        }
+        
+        /* Separator line for OR text */
+        .separator {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+            color: #777;
+        }
+        
+        .separator::before,
+        .separator::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .separator::before {
+            margin-right: 10px;
+        }
+        
+        .separator::after {
+            margin-left: 10px;
+        }
+        
+        /* Load sample data button */
+        .load-sample-btn {
+            background-color: var(--secondary-color);
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .load-sample-btn:hover {
+            background-color: #02c5ae;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-tabs {
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .nav-tabs .nav-link {
+            color: var(--text-color);
+            border: none;
+            padding: 10px 20px;
+            margin-right: 5px;
+            font-weight: 500;
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+            background-color: transparent;
+        }
+        
+        .filter-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .filter-dropdown {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+        }
+        
+        .tree-container {
+            overflow-y: auto;
+            max-height: 600px;
+            border-right: 1px solid var(--border-color);
+        }
+        
+        .heatmap-container {
+            overflow: auto;
+            max-height: 600px;
+            position: relative;
+        }
+        
+        .tree-node {
+            padding: 5px 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tree-node i {
+            margin-right: 5px;
+            color: var(--primary-color);
+        }
+        
+        .tree-node:hover {
+            background-color: rgba(98, 0, 238, 0.05);
+        }
+        
+        .tree-node.selected {
+            background-color: rgba(98, 0, 238, 0.1);
+            font-weight: 500;
+        }
+        
+        .heatmap-cell {
+            stroke: white;
+            stroke-width: 1px;
+        }
+        
+        .heatmap-cell:hover {
+            stroke: var(--primary-color);
+            stroke-width: 2px;
+        }
+        
+        .summary-row {
+            font-weight: 600;
+        }
+        
+        .minmax-table-container {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .minmax-table th {
+            position: sticky;
+            top: 0;
+            background-color: white;
+            z-index: 10;
+        }
+        
+        .loading-indicator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(98, 0, 238, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--primary-color);
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Color Bar Styles */
+        .color-bar {
+            position: absolute; 
+            top: 20px;
+            left: 10px;
+            width: 20px;
+            height: 200px;
+            border: 1px solid #ccc;
+            background: linear-gradient(to bottom, #6a0dad, #f8dae9);
+            z-index: 10;
+        }
+        
+        .color-bar-labels {
+            position: absolute;
+            top: 20px;
+            left: 35px;
+            height: 200px;
+        }
+        
+        .color-bar-label {
+            position: absolute;
+            font-size: 10px;
+            transform: translateY(-50%);
+            white-space: nowrap;
+        }
+        
+        /* Info panel at the bottom */
+        .info-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            border-top: 1px solid var(--border-color);
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px 20px;
+            z-index: 1000;
+            display: flex;
+            height: 70px; /* Slightly reduced height */
+        }
+        
+        .cell-info {
+            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            overflow-y: auto;
+            padding-right: 20px;
+        }
+        
+        .cell-info-item {
+            margin-right: 15px;
+            white-space: nowrap;
+        }
+        
+        .cell-info-label {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        
+        .controls-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-left: 20px;
+            border-left: 1px solid var(--border-color);
+        }
+        
+        .color-palette-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-right: 15px;
+        }
+        
+        .color-palette-label {
+            font-size: 0.85rem;
+            margin-bottom: 0;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .color-palette-select {
+            max-width: 140px;
+            min-width: 140px;
+            height: 30px;
+            font-size: 0.85rem;
+            padding: 0 10px;
+        }
+        
+        .zoom-controls {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .download-controls {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .control-btn {
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            background-color: white;
+            transition: all 0.2s ease;
+            padding: 0 10px;
+            font-size: 0.85rem;
+        }
+        
+        .zoom-btn {
+            width: 30px;
+            padding: 0;
+        }
+        
+        .control-btn:hover {
+            background-color: var(--hover-color);
+            color: white;
+        }
+        
+        .download-btn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .download-btn:hover {
+            background-color: var(--hover-color);
+            opacity: 0.9;
+        }
+        
+        /* Sample palette colors for dropdown */
+        .palette-preview {
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+            margin-right: 5px;
+            vertical-align: middle;
+            border: 1px solid #ccc;
+        }
+        
+        .palette-preview-rdpu { background: linear-gradient(to right, #feebe2, #6a0dad); }
+        .palette-preview-viridis { background: linear-gradient(to right, #440154, #fde725); }
+        .palette-preview-inferno { background: linear-gradient(to right, #000004, #fcffa4); }
+        .palette-preview-magma { background: linear-gradient(to right, #000004, #fcfdbf); }
+        .palette-preview-plasma { background: linear-gradient(to right, #0d0887, #f0f921); }
+        .palette-preview-blues { background: linear-gradient(to right, #f7fbff, #08306b); }
+        .palette-preview-greens { background: linear-gradient(to right, #f7fcf5, #00441b); }
+        .palette-preview-ylrd { background: linear-gradient(to right, #ffffcc, #800026); }
+        .palette-preview-bugn { background: linear-gradient(to right, #f7fcfd, #00441b); }
+        .palette-preview-spectral { background: linear-gradient(to right, #9e0142, #5e4fa2); }
+        
+        /* Footer styles */
+        .footer {
+            position: relative;
+            width: 100%;
+            background-color: #2c2c2c;
+            color: #f5f5f5;
+            padding: 15px 0;
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 30px;
+            margin-bottom: 45px; /* Reduced space below footer for info panel */
+        }
+        
+        .footer a {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .filter-dropdown {
+                min-width: 100%;
+            }
+            
+            .tree-container {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                max-height: 300px;
+            }
+            
+            .info-panel {
+                flex-direction: column;
+                height: auto;
+                padding-bottom: 5px;
+            }
+            
+            .controls-container {
+                border-left: none;
+                border-top: 1px solid var(--border-color);
+                padding-left: 0;
+                padding-top: 10px;
+                margin-top: 10px;
+                flex-wrap: wrap;
+            }
+            
+            .color-palette-container {
+                margin-bottom: 10px;
+                width: 100%;
+            }
+            
+            .logo-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .header-buttons {
+                margin-top: 15px;
+                gap: 10px;
+            }
+            
+            .download-data-btn {
+                font-size: 0.9rem;
+                padding: 6px 12px;
+            }
+            
+            .footer {
+                margin-bottom: 80px; /* Reduced space for mobile */
+            }
+            
+            body {
+                padding-bottom: 120px; /* More padding for taller info panel on mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container-fluid">
+            <div class="logo-container">
+                <div class="logo-title-container">
+                    <img src="https://github.com/earmingol/scCellFie/blob/main/scCellFie-Logo.png?raw=true" alt="scCellFie Logo" class="logo">
+                    <h1 class="app-title">Metabolic Task Visualization</h1>
+                </div>
+                <div class="header-buttons">
+                    <button id="download-dataset-btn" class="download-data-btn">
+                        <i class="fas fa-download me-2"></i>Download Dataset
+                    </button>
+                    <a href="https://github.com/earmingol/scCellFie" target="_blank" class="github-btn" title="View on GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container-fluid">
+        <!-- File Upload Section -->
+        <div class="card">
+            <div class="card-header">
+                Data Upload
+            </div>
+            <div class="card-body">
+                <!-- CSV FORMAT EXPLANATION: Edit this section to modify the data format instructions -->
+                <div class="alert alert-info mb-3">
+                    <h5 class="alert-heading">Expected CSV Formats:</h5>
+                    <p class="mb-1"><strong>Melted Results CSV:</strong> Should contain columns for <code>tissue</code>, <code>cell_type</code>, <code>metabolic_task</code>, <code>trimean</code> and optionally <code>scaled_trimean</code>. Additional numerical columns will be shown in the cell details.</p>
+                    <p class="mb-0"><strong>Min/Max CSV:</strong> Should contain metabolic tasks in rows or columns, with values for minimum and maximum thresholds. The tool will attempt to detect and transpose if needed.</p>
+                </div>
+                <!-- END OF CSV FORMAT EXPLANATION -->
+                
+                <div class="upload-area" id="upload-area">
+                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                    <!-- UPLOAD TEXT: Edit this to modify the upload instructions -->
+                    <p class="upload-text">Drag and drop your CSV files or click to browse</p>
+                    <!-- END OF UPLOAD TEXT -->
+                    <input type="file" id="file-upload" class="d-none" accept=".csv" multiple>
+                    <button class="btn btn-primary" id="browse-files">Browse Files</button>
+                </div>
+                
+                <!-- OR separator and CZI data button -->
+                <div class="separator">OR</div>
+                
+                <div class="text-center">
+                    <button id="load-czi-data" class="load-sample-btn">
+                        <i class="fas fa-database me-2"></i>Load CZI CELLxGENE
+                    </button>
+                </div>
+                
+                <div class="uploaded-files" id="uploaded-files">
+                    <!-- Uploaded file list will be displayed here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tabs Navigation -->
+        <ul class="nav nav-tabs" id="dataTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="heatmap-tab" data-bs-toggle="tab" data-bs-target="#heatmap-pane" type="button" role="tab" aria-controls="heatmap-pane" aria-selected="true">
+                    Heatmap Visualization
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="minmax-tab" data-bs-toggle="tab" data-bs-target="#minmax-pane" type="button" role="tab" aria-controls="minmax-pane" aria-selected="false">
+                    Task Min/Max Values
+                </button>
+            </li>
+        </ul>
+        
+        <!-- Tab Content -->
+        <div class="tab-content" id="dataTabsContent">
+            <!-- Heatmap Visualization Tab -->
+            <div class="tab-pane fade show active" id="heatmap-pane" role="tabpanel" aria-labelledby="heatmap-tab">
+                <div class="card">
+                    <div class="card-header">
+                        Metabolic Task Heatmap
+                    </div>
+                    <div class="card-body">
+                        <div class="filter-section">
+                            <div class="filter-dropdown">
+                                <label for="tissue-filter" class="form-label">Tissue</label>
+                                <select id="tissue-filter" class="form-select" multiple>
+                                    <!-- Tissue options will be populated dynamically -->
+                                </select>
+                                <div class="mt-2">
+                                    <input type="text" id="tissue-search" class="form-control" placeholder="Search tissues...">
+                                </div>
+                            </div>
+                            <div class="filter-dropdown">
+                                <label for="cell-type-filter" class="form-label">Cell Type</label>
+                                <select id="cell-type-filter" class="form-select" multiple>
+                                    <!-- Cell type options will be populated dynamically -->
+                                </select>
+                                <div class="mt-2">
+                                    <input type="text" id="cell-type-search" class="form-control" placeholder="Search cell types...">
+                                </div>
+                            </div>
+                            <div class="filter-dropdown">
+                                <label for="task-filter" class="form-label">Metabolic Task</label>
+                                <select id="task-filter" class="form-select" multiple>
+                                    <!-- Metabolic task options will be populated dynamically -->
+                                </select>
+                                <div class="mt-2">
+                                    <input type="text" id="task-search" class="form-control" placeholder="Search metabolic tasks...">
+                                </div>
+                            </div>
+                            <div class="filter-dropdown">
+                                <label for="search-filter" class="form-label">Global Search</label>
+                                <input type="text" id="search-filter" class="form-control" placeholder="Search all fields...">
+                            </div>
+                        </div>
+                        
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="scale-values">
+                            <label class="form-check-label" for="scale-values">
+                                Use scaled values
+                            </label>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="tree-container" id="tree-container">
+                                    <!-- Tree view will be rendered here -->
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="heatmap-container" id="heatmap-container">
+                                    <!-- Heatmap will be rendered here -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="tooltip-container" class="tooltip-container" style="display: none;">
+                            <!-- Tooltip content will be populated dynamically -->
+                        </div>
+                        
+                        <!-- Info Panel for Cell Details -->
+                        <div class="info-panel" id="info-panel">
+                            <div class="cell-info" id="cell-info">
+                                <div class="cell-info-item">
+                                    <span class="cell-info-label">Hover over cells to see details</span>
+                                </div>
+                            </div>
+                            <div class="controls-container">
+                                <!-- Color Palette Selector (NEW) -->
+                                <div class="color-palette-container">
+                                    <label for="color-palette" class="color-palette-label">Color Palette:</label>
+                                    <select id="color-palette" class="form-select color-palette-select">
+                                        <option value="interpolateRdPu">
+                                            <span class="palette-preview palette-preview-rdpu"></span>Purple (RdPu)
+                                        </option>
+                                        <option value="interpolateViridis">
+                                            <span class="palette-preview palette-preview-viridis"></span>Viridis
+                                        </option>
+                                        <option value="interpolateInferno">
+                                            <span class="palette-preview palette-preview-inferno"></span>Inferno
+                                        </option>
+                                        <option value="interpolateMagma">
+                                            <span class="palette-preview palette-preview-magma"></span>Magma
+                                        </option>
+                                        <option value="interpolatePlasma">
+                                            <span class="palette-preview palette-preview-plasma"></span>Plasma
+                                        </option>
+                                        <option value="interpolateBlues">
+                                            <span class="palette-preview palette-preview-blues"></span>Blues
+                                        </option>
+                                        <option value="interpolateGreens">
+                                            <span class="palette-preview palette-preview-greens"></span>Greens
+                                        </option>
+                                        <option value="interpolateYlOrRd">
+                                            <span class="palette-preview palette-preview-ylrd"></span>Yellow-Red
+                                        </option>
+                                        <option value="interpolateBuGn">
+                                            <span class="palette-preview palette-preview-bugn"></span>Blue-Green
+                                        </option>
+                                        <option value="interpolateSpectral">
+                                            <span class="palette-preview palette-preview-spectral"></span>Spectral
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="zoom-controls">
+                                    <button class="control-btn zoom-btn" id="zoom-in-btn" onclick="zoomIn()" title="Zoom In"><i class="fas fa-plus"></i></button>
+                                    <button class="control-btn zoom-btn" id="zoom-out-btn" onclick="zoomOut()" title="Zoom Out"><i class="fas fa-minus"></i></button>
+                                    <button class="control-btn" id="zoom-reset-btn" onclick="resetZoom()" title="Reset Zoom">Reset</button>
+                                </div>
+                                <div class="download-controls">
+                                    <button class="control-btn download-btn" id="download-svg-btn" onclick="downloadSVG()" title="Download as SVG"><i class="fas fa-download me-1"></i>SVG</button>
+                                    <button class="control-btn download-btn" id="download-png-btn" onclick="downloadPNG()" title="Download as PNG"><i class="fas fa-download me-1"></i>PNG</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- MinMax Data Tab -->
+            <div class="tab-pane fade" id="minmax-pane" role="tabpanel" aria-labelledby="minmax-tab">
+                <div class="card">
+                    <div class="card-header">
+                        Metabolic Task Min/Max Values
+                    </div>
+                    <div class="card-body">
+                        <div class="filter-section">
+                            <div class="filter-dropdown">
+                                <label for="minmax-task-filter" class="form-label">Filter Tasks</label>
+                                <input type="text" id="minmax-task-filter" class="form-control" placeholder="Search for tasks...">
+                            </div>
+                        </div>
+                        
+                        <div class="minmax-table-container">
+                            <table class="table table-striped table-hover minmax-table" id="minmax-table">
+                                <thead id="minmax-table-header">
+                                    <tr>
+                                        <th>Metabolic Task</th>
+                                        <!-- Additional headers will be populated dynamically -->
+                                    </tr>
+                                </thead>
+                                <tbody id="minmax-table-body">
+                                    <!-- MinMax data will be populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer - You can replace this content with your own copyright information -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- REPLACE: Update with actual copyright information -->
+                    <p>&copy; 2025 Wellcome Sanger Institute. All rights reserved.</p>
+                </div>
+                <div class="col-md-6">
+                    <!-- REPLACE: Update with actual hosting/sponsor information -->
+                    <p>Hosted by <a href="https://www.sanger.ac.uk/">Wellcome Sanger Institute</a> | <a href="#">Terms and Conditions</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Global variables to store data
+        let meltedData = [];
+        let minMaxData = {};
+        let processedData = {};
+        let uniqueTasks = [];
+        let uniqueTissues = [];
+        let uniqueCellTypes = [];
+        let cellTypesByTissue = {};
+        let selectedTissues = [];
+        let selectedCellTypes = [];
+        let selectedTasks = [];
+        let searchTerm = "";
+        let useScaledValues = false;
+        let scaledData = {}; // For storing calculated scaled values if scaled_trimean not present
+        let zoomLevel = 1;
+        let minMaxHeaders = []; // Store detected column headers
+        let svgElement = null; // Store reference to the SVG element
+        let heatmapGroup = null; // Store reference to the group that will be zoomed
+        let selectedColorPalette = "interpolateRdPu"; // Default color palette
+        
+        // URLs for the CZI CELLxGENE data files
+        const CZI_MELTED_DATA_URL = "https://raw.githubusercontent.com/ventolab/sccellfie-website/refs/heads/main/data/CELLxGENEMetabolicTasksMeltedResults.csv";
+        const CZI_MINMAX_DATA_URL = "https://raw.githubusercontent.com/ventolab/sccellfie-website/refs/heads/main/data/CELLxGENEMetabolicTasksMinMax.csv";
+        
+        // DOM Elements
+        const fileUploadInput = document.getElementById('file-upload');
+        const browseFilesBtn = document.getElementById('browse-files');
+        const uploadArea = document.getElementById('upload-area');
+        const uploadedFilesList = document.getElementById('uploaded-files');
+        const tissueFilter = document.getElementById('tissue-filter');
+        const cellTypeFilter = document.getElementById('cell-type-filter');
+        const taskFilter = document.getElementById('task-filter');
+        const searchFilter = document.getElementById('search-filter');
+        const tissueSearch = document.getElementById('tissue-search');
+        const cellTypeSearch = document.getElementById('cell-type-search');
+        const taskSearch = document.getElementById('task-search');
+        const scaleValuesCheckbox = document.getElementById('scale-values');
+        const treeContainer = document.getElementById('tree-container');
+        const heatmapContainer = document.getElementById('heatmap-container');
+        const tooltipContainer = document.getElementById('tooltip-container');
+        const cellInfoPanel = document.getElementById('cell-info');
+        const minmaxTaskFilter = document.getElementById('minmax-task-filter');
+        const minmaxTableBody = document.getElementById('minmax-table-body');
+        const minmaxTableHeader = document.getElementById('minmax-table-header');
+        const colorPaletteSelect = document.getElementById('color-palette');
+        const loadCziDataBtn = document.getElementById('load-czi-data');
+        const downloadDatasetBtn = document.getElementById('download-dataset-btn');
+        
+        // Define mapping of palette names to color functions
+        const colorPalettes = {
+            "interpolateRdPu": d3.interpolateRdPu,
+            "interpolateViridis": d3.interpolateViridis,
+            "interpolateInferno": d3.interpolateInferno,
+            "interpolateMagma": d3.interpolateMagma,
+            "interpolatePlasma": d3.interpolatePlasma,
+            "interpolateBlues": d3.interpolateBlues,
+            "interpolateGreens": d3.interpolateGreens,
+            "interpolateYlOrRd": d3.interpolateYlOrRd,
+            "interpolateBuGn": d3.interpolateBuGn,
+            "interpolateSpectral": d3.interpolateSpectral
+        };
+        
+        // Global zoom functions
+        function zoomIn() {
+            zoomLevel *= 1.2;
+            applyZoom();
+        }
+        
+        function zoomOut() {
+            zoomLevel /= 1.2;
+            if (zoomLevel < 0.1) zoomLevel = 0.1;
+            applyZoom();
+        }
+        
+        function resetZoom() {
+            zoomLevel = 1;
+            applyZoom();
+        }
+        
+        // Download functions
+        function downloadSVG() {
+            if (!svgElement) {
+                                    showNotification('No visualization to download. Please select data first.', 'warning', 'bottom-right');
+                return;
+            }
+            
+            try {
+                // Get the SVG element
+                const svgElement = document.querySelector('#heatmap-svg');
+                if (!svgElement) {
+                    showNotification('Could not find SVG element to download', 'warning', 'bottom-right');
+                    return;
+                }
+                
+                // Create a clone of the SVG to modify
+                const svgClone = svgElement.cloneNode(true);
+                
+                // Make all cells have consistent white borders for export
+                svgClone.querySelectorAll('.heatmap-cell').forEach(cell => {
+                    // For exports, we want all cells to have white borders
+                    cell.setAttribute('stroke', '#fff');
+                    cell.setAttribute('stroke-width', '1');
+                });
+                
+                // Add namespaces for SVG
+                svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                svgClone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
+                
+                // Add the color bar to the SVG so it's included in the export
+                const colorBar = document.querySelector('.color-bar');
+                const colorBarLabels = document.querySelector('.color-bar-labels');
+                
+                // We'll need to include these elements in our SVG
+                if (colorBar && colorBarLabels) {
+                    // Create a style element to preserve the CSS
+                    const styleElement = document.createElement('style');
+                    styleElement.textContent = `
+                        .export-color-bar {
+                            fill: url(#export-color-gradient);
+                            stroke: #ccc;
+                            stroke-width: 1px;
+                        }
+                    `;
+                    svgClone.appendChild(styleElement);
+                    
+                    // Add a gradient definition
+                    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+                    const linearGradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+                    linearGradient.setAttribute('id', 'export-color-gradient');
+                    linearGradient.setAttribute('x1', '0%');
+                    linearGradient.setAttribute('y1', '0%');
+                    linearGradient.setAttribute('x2', '0%');
+                    linearGradient.setAttribute('y2', '100%');
+                    
+                    // Get computed background from the colorBar
+                    const computedStyle = window.getComputedStyle(colorBar);
+                    const backgroundImage = computedStyle.backgroundImage;
+                    
+                    // Get colors for the current palette
+                    const colorScale = d3.scaleSequential(colorPalettes[selectedColorPalette]);
+                    const [minDomain, maxDomain] = colorScale.domain();
+                    
+                    // Create gradient stops
+                    const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+                    stop1.setAttribute('offset', '0%');
+                    stop1.setAttribute('stop-color', colorScale(maxDomain));
+                    
+                    const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+                    stop2.setAttribute('offset', '100%');
+                    stop2.setAttribute('stop-color', colorScale(minDomain));
+                    
+                    linearGradient.appendChild(stop1);
+                    linearGradient.appendChild(stop2);
+                    defs.appendChild(linearGradient);
+                    svgClone.appendChild(defs);
+                    
+                    // Create a rectangle with the gradient
+                    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                    rect.setAttribute('class', 'export-color-bar');
+                    rect.setAttribute('x', '10');
+                    rect.setAttribute('y', '20');
+                    rect.setAttribute('width', '20');
+                    rect.setAttribute('height', '200');
+                    
+                    // Add it to the SVG
+                    svgClone.appendChild(rect);
+                    
+                    // Add labels
+                    const labels = Array.from(colorBarLabels.querySelectorAll('.color-bar-label'));
+                    labels.forEach(label => {
+                        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                        text.setAttribute('x', '35');
+                        text.setAttribute('y', parseFloat(label.style.top) / 100 * 200 + 20);
+                        text.setAttribute('font-size', '10px');
+                        text.textContent = label.textContent;
+                        svgClone.appendChild(text);
+                    });
+                }
+                
+                // Convert to a string
+                const serializer = new XMLSerializer();
+                let svgString = serializer.serializeToString(svgClone);
+                
+                // Add title for better filename
+                const title = 'metabolic_tasks_heatmap_' + new Date().toISOString().slice(0, 10);
+                
+                // Create download link
+                const downloadLink = document.createElement('a');
+                downloadLink.href = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgString);
+                downloadLink.download = title + '.svg';
+                
+                // Trigger download
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                
+                                    showNotification('SVG file downloaded successfully', 'success', 'bottom-right');
+            } catch (error) {
+                console.error('Error downloading SVG:', error);
+                showNotification('Error downloading SVG: ' + error.message, 'warning', 'bottom-right');
+            }
+        }
+        
+        function downloadPNG() {
+            if (!svgElement) {
+                showNotification('No visualization to download. Please select data first.', 'warning');
+                return;
+            }
+            
+            try {
+                // Get the SVG element
+                const svgElement = document.querySelector('#heatmap-svg');
+                if (!svgElement) {
+                    showNotification('Could not find SVG element to download', 'warning');
+                    return;
+                }
+                
+                // Create a clone of the SVG to modify
+                const svgClone = svgElement.cloneNode(true);
+                
+                // Make all cells have consistent white borders for export
+                svgClone.querySelectorAll('.heatmap-cell').forEach(cell => {
+                    // For exports, we want all cells to have white borders
+                    cell.setAttribute('stroke', '#fff');
+                    cell.setAttribute('stroke-width', '1');
+                });
+                
+                // Add namespaces and include color bar as in SVG download
+                svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                svgClone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
+                
+                // Add the color bar (same code as in SVG download but with current palette)
+                const colorBar = document.querySelector('.color-bar');
+                const colorBarLabels = document.querySelector('.color-bar-labels');
+                
+                if (colorBar && colorBarLabels) {
+                    // Create a style element
+                    const styleElement = document.createElement('style');
+                    styleElement.textContent = `
+                        .export-color-bar {
+                            fill: url(#export-color-gradient);
+                            stroke: #ccc;
+                            stroke-width: 1px;
+                        }
+                    `;
+                    svgClone.appendChild(styleElement);
+                    
+                    // Add gradient definition
+                    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+                    const linearGradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+                    linearGradient.setAttribute('id', 'export-color-gradient');
+                    linearGradient.setAttribute('x1', '0%');
+                    linearGradient.setAttribute('y1', '0%');
+                    linearGradient.setAttribute('x2', '0%');
+                    linearGradient.setAttribute('y2', '100%');
+                    
+                    // Get colors for the current palette
+                    const colorScale = d3.scaleSequential(colorPalettes[selectedColorPalette]);
+                    const [minDomain, maxDomain] = colorScale.domain();
+                    
+                    const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+                    stop1.setAttribute('offset', '0%');
+                    stop1.setAttribute('stop-color', colorScale(maxDomain));
+                    
+                    const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+                    stop2.setAttribute('offset', '100%');
+                    stop2.setAttribute('stop-color', colorScale(minDomain));
+                    
+                    linearGradient.appendChild(stop1);
+                    linearGradient.appendChild(stop2);
+                    defs.appendChild(linearGradient);
+                    svgClone.appendChild(defs);
+                    
+                    // Create rectangle with gradient
+                    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                    rect.setAttribute('class', 'export-color-bar');
+                    rect.setAttribute('x', '10');
+                    rect.setAttribute('y', '20');
+                    rect.setAttribute('width', '20');
+                    rect.setAttribute('height', '200');
+                    svgClone.appendChild(rect);
+                    
+                    // Add labels
+                    const labels = Array.from(colorBarLabels.querySelectorAll('.color-bar-label'));
+                    labels.forEach(label => {
+                        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                        text.setAttribute('x', '35');
+                        text.setAttribute('y', parseFloat(label.style.top) / 100 * 200 + 20);
+                        text.setAttribute('font-size', '10px');
+                        text.textContent = label.textContent;
+                        svgClone.appendChild(text);
+                    });
+                }
+                
+                // Get the dimensions including all elements (getBBox needs to be called after elements are added)
+                const bbox = svgElement.getBBox();
+                const width = Math.max(svgElement.getAttribute('width'), bbox.width + bbox.x + 100);
+                const height = Math.max(svgElement.getAttribute('height'), bbox.height + bbox.y + 100);
+                
+                // Set dimensions
+                svgClone.setAttribute('width', width);
+                svgClone.setAttribute('height', height);
+                
+                // Convert SVG to a data URL
+                const serializer = new XMLSerializer();
+                const svgString = serializer.serializeToString(svgClone);
+                const svgBlob = new Blob([svgString], {type: 'image/svg+xml;charset=utf-8'});
+                const url = URL.createObjectURL(svgBlob);
+                
+                // Create a canvas with appropriate size
+                const canvas = document.createElement('canvas');
+                // Scale up for better quality
+                const scale = 2;
+                canvas.width = width * scale;
+                canvas.height = height * scale;
+                const ctx = canvas.getContext('2d');
+                
+                // Fill with white background
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Create image from SVG
+                const img = new Image();
+                img.onload = function() {
+                    // Draw image scaled up for better resolution
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    
+                    // Create download link
+                    try {
+                        const pngUrl = canvas.toDataURL('image/png');
+                        const downloadLink = document.createElement('a');
+                        downloadLink.href = pngUrl;
+                        downloadLink.download = 'metabolic_tasks_heatmap_' + new Date().toISOString().slice(0, 10) + '.png';
+                        
+                        document.body.appendChild(downloadLink);
+                        downloadLink.click();
+                        document.body.removeChild(downloadLink);
+                        
+                        // Clean up
+                        URL.revokeObjectURL(url);
+                        
+                        showNotification('PNG file downloaded successfully', 'success', 'bottom-right');
+                    } catch (error) {
+                        console.error('Error creating PNG data URL:', error);
+                        showNotification('Error creating PNG: ' + error.message, 'warning', 'bottom-right');
+                    }
+                };
+                
+                img.onerror = function(error) {
+                    console.error('Error loading SVG into image:', error);
+                    showNotification('Error converting SVG to PNG', 'warning', 'bottom-right');
+                    URL.revokeObjectURL(url);
+                };
+                
+                img.src = url;
+            } catch (error) {
+                console.error('Error downloading PNG:', error);
+                showNotification('Error downloading PNG: ' + error.message, 'warning', 'bottom-right');
+            }
+        }
+        
+        // New function to download the CZI CELLxGENE dataset
+        function downloadCziDataset() {
+            // Create a zip of both files
+            // For now, just download the melted data as it's usually the main file of interest
+            fetch(CZI_MELTED_DATA_URL)
+                .then(response => response.text())
+                .then(csv => {
+                    const blob = new Blob([csv], { type: 'text/csv' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'CELLxGENEMetabolicTasksMeltedResults.csv';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    showNotification('Dataset downloaded successfully', 'success', 'bottom-right');
+                })
+                .catch(error => {
+                    console.error('Error downloading dataset:', error);
+                    showNotification('Error downloading dataset: ' + error.message, 'warning', 'bottom-right');
+                });
+        }
+        
+        function applyZoom() {
+            if (svgElement && heatmapGroup) {
+                const margin = { top: 150, right: 50, bottom: 50, left: 200 };
+                heatmapGroup.attr('transform', `translate(${margin.left},${margin.top}) scale(${zoomLevel})`);
+            }
+        }
+        
+        // Event Listeners
+        browseFilesBtn.addEventListener('click', () => fileUploadInput.click());
+        fileUploadInput.addEventListener('change', handleFileUpload);
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('active');
+        });
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('active');
+        });
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('active');
+            handleFileUpload({ target: { files: e.dataTransfer.files } });
+        });
+        
+        // Add listener for the Load CZI CELLxGENE button
+        loadCziDataBtn.addEventListener('click', loadCziCellGeneData);
+        
+        // Add listener for the Download Dataset button
+        downloadDatasetBtn.addEventListener('click', downloadCziDataset);
+        
+        tissueFilter.addEventListener('change', updateFilters);
+        cellTypeFilter.addEventListener('change', updateFilters);
+        taskFilter.addEventListener('change', updateFilters);
+        searchFilter.addEventListener('input', updateFilters);
+        tissueSearch.addEventListener('input', filterTissueOptions);
+        cellTypeSearch.addEventListener('input', filterCellTypeOptions);
+        taskSearch.addEventListener('input', filterTaskOptions);
+        scaleValuesCheckbox.addEventListener('change', updateScaledValues);
+        minmaxTaskFilter.addEventListener('input', filterMinMaxTable);
+        
+        // Color palette change event listener
+        colorPaletteSelect.addEventListener('change', function() {
+            selectedColorPalette = this.value;
+            updateHeatmap();
+        });
+        
+        // Function to load CZI CELLxGENE data
+        function loadCziCellGeneData() {
+            // Show loading indicator
+            const loadingItem = document.createElement('div');
+            loadingItem.className = 'alert alert-info d-flex justify-content-between align-items-center';
+            loadingItem.innerHTML = `
+                <span><i class="fas fa-database me-2"></i>Loading CZI CELLxGENE data...</span>
+                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            `;
+            uploadedFilesList.innerHTML = '';
+            uploadedFilesList.appendChild(loadingItem);
+            
+            // Load both datasets
+            Promise.all([
+                fetch(CZI_MELTED_DATA_URL).then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Network error: ${response.status} ${response.statusText}`);
+                    }
+                    return response.text();
+                }),
+                fetch(CZI_MINMAX_DATA_URL).then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Network error: ${response.status} ${response.statusText}`);
+                    }
+                    return response.text();
+                })
+            ]).then(([meltedCsv, minMaxCsv]) => {
+                // Check if we got valid data
+                if (!meltedCsv || typeof meltedCsv !== 'string') {
+                    throw new Error('Invalid melted data response');
+                }
+                if (!minMaxCsv || typeof minMaxCsv !== 'string') {
+                    throw new Error('Invalid min/max data response');
+                }
+                
+                // Parse the CSVs
+                const meltedResults = Papa.parse(meltedCsv, {
+                    header: true,
+                    dynamicTyping: true,
+                    skipEmptyLines: true
+                });
+                
+                const minMaxResults = Papa.parse(minMaxCsv, {
+                    header: true,
+                    dynamicTyping: true,
+                    skipEmptyLines: true
+                });
+                
+                // Check if parsing was successful
+                if (!meltedResults.data || !meltedResults.meta || !meltedResults.meta.fields) {
+                    throw new Error('Failed to parse melted data CSV');
+                }
+                
+                if (!minMaxResults.data || !minMaxResults.meta || !minMaxResults.meta.fields) {
+                    throw new Error('Failed to parse min/max data CSV');
+                }
+                
+                // Process the data
+                processMeltedData(meltedResults.data);
+                processMinMaxData(minMaxResults.data, minMaxResults.meta.fields);
+                
+                // Update UI
+                updateUI();
+                
+                // Update loading indicator
+                loadingItem.innerHTML = `
+                    <span><i class="fas fa-check-circle text-success me-2"></i>CZI CELLxGENE data loaded successfully</span>
+                `;
+                
+                showNotification('CZI CELLxGENE data loaded successfully', 'success', 'bottom-right');
+            }).catch(error => {
+                console.error('Error loading CZI CELLxGENE data:', error);
+                
+                // Update loading indicator to show error
+                loadingItem.innerHTML = `
+                    <span><i class="fas fa-times-circle text-danger me-2"></i>Error loading CZI CELLxGENE data: ${error.message}</span>
+                `;
+                
+                showNotification('Error loading CZI CELLxGENE data: ' + error.message, 'warning', 'bottom-right');
+            });
+        }
+        
+        // Functions
+        function handleFileUpload(event) {
+            const files = event.target.files;
+            if (!files || files.length === 0) return;
+            
+            // Clear uploaded files list
+            uploadedFilesList.innerHTML = '';
+            
+            // Process each file
+            Array.from(files).forEach(file => {
+                if (file.type !== 'text/csv' && !file.name.endsWith('.csv')) {
+                    showNotification('Please upload CSV files only.', 'warning', 'bottom-right');
+                    return;
+                }
+                
+                const fileItem = document.createElement('div');
+                fileItem.className = 'alert alert-info d-flex justify-content-between align-items-center';
+                fileItem.innerHTML = `
+                    <span><i class="fas fa-file-csv me-2"></i>${file.name}</span>
+                    <div class="spinner-border spinner-border-sm text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                `;
+                uploadedFilesList.appendChild(fileItem);
+                
+                // Parse CSV file
+                Papa.parse(file, {
+                    header: true,
+                    dynamicTyping: true,
+                    skipEmptyLines: true,
+                    complete: results => {
+                        // Update spinner to checkmark
+                        fileItem.querySelector('.spinner-border').outerHTML = '<i class="fas fa-check-circle text-success"></i>';
+                        
+                        // Determine file type and process accordingly
+                        if (results.meta.fields.includes('metabolic_task') && 
+                            results.meta.fields.includes('tissue') && 
+                            results.meta.fields.includes('cell_type')) {
+                            // This is a Melted Results file with the main data
+                            processMeltedData(results.data);
+                            showNotification(`Successfully processed ${file.name} as Melted Results data.`, 'success', 'bottom-right');
+                        } else if (results.meta.fields.length > 5) {
+                            // This is likely a MinMax file with thresholds
+                            // For MinMax data, check if we need to transpose
+                            const shouldTranspose = determineIfTransposeNeeded(results);
+                            if (shouldTranspose) {
+                                const transposed = transposeCSV(results.data, results.meta.fields);
+                                processMinMaxData(transposed.data, transposed.fields);
+                            } else {
+                                processMinMaxData(results.data, results.meta.fields);
+                            }
+                            showNotification(`Successfully processed ${file.name} as Min/Max data.`, 'success', 'bottom-right');
+                        } else {
+                            showNotification(`Could not determine the format of ${file.name}.`, 'warning', 'bottom-right');
+                        }
+                        
+                        // Update UI
+                        updateUI();
+                    },
+                    error: error => {
+                        fileItem.querySelector('.spinner-border').outerHTML = '<i class="fas fa-times-circle text-danger"></i>';
+                        showNotification(`Error parsing ${file.name}: ${error}`, 'warning', 'bottom-right');
+                    }
+                });
+            });
+        }
+        
+        function determineIfTransposeNeeded(results) {
+            // Check if first column is likely a row identifier
+            const firstColumnName = results.meta.fields[0];
+            const firstColumnValues = results.data.map(row => row[firstColumnName]);
+            
+            // If first column contains keywords like 'min', 'max', etc.
+            const minMaxKeywords = ['min', 'max', 'mean', 'median', 'average', 'std'];
+            const containsMinMaxKeywords = firstColumnValues.some(value => 
+                minMaxKeywords.some(keyword => 
+                    value && String(value).toLowerCase().includes(keyword)
+                )
+            );
+            
+            return containsMinMaxKeywords;
+        }
+        
+        function transposeCSV(data, fields) {
+            // Get the first column name (usually a descriptor)
+            const firstColumnName = fields[0];
+            
+            // Extract row identifiers from the first column
+            const rowIdentifiers = data.map(row => row[firstColumnName]);
+            
+            // Create new fields (columns) for transposed data
+            // First column will be 'Metabolic Task'
+            const newFields = ['Metabolic Task', ...rowIdentifiers];
+            
+            // Create transposed data structure
+            const transposedData = [];
+            
+            // For each field except the first one (which becomes row identifiers)
+            for (let i = 1; i < fields.length; i++) {
+                const taskName = fields[i];
+                const newRow = { 'Metabolic Task': taskName };
+                
+                // For each original row, create a column in the new data
+                rowIdentifiers.forEach((rowId, index) => {
+                    newRow[rowId] = data[index][taskName];
+                });
+                
+                transposedData.push(newRow);
+            }
+            
+            return { data: transposedData, fields: newFields };
+        }
+        
+        function processMeltedData(data) {
+            meltedData = data;
+            
+            // Extract unique values
+            uniqueTasks = [...new Set(data.map(d => d.metabolic_task))].sort();
+            uniqueTissues = [...new Set(data.map(d => d.tissue))].sort();
+            uniqueCellTypes = [...new Set(data.map(d => d.cell_type))].sort();
+            
+            // Group cell types by tissue
+            cellTypesByTissue = {};
+            data.forEach(d => {
+                if (!cellTypesByTissue[d.tissue]) {
+                    cellTypesByTissue[d.tissue] = new Set();
+                }
+                cellTypesByTissue[d.tissue].add(d.cell_type);
+            });
+            
+            // Convert sets to arrays
+            Object.keys(cellTypesByTissue).forEach(tissue => {
+                cellTypesByTissue[tissue] = [...cellTypesByTissue[tissue]].sort();
+            });
+            
+            // Process data for visualization
+            processDataForVisualization();
+        }
+        
+        function processMinMaxData(data, fields) {
+            // Convert data to more usable structure
+            minMaxData = {};
+            
+            // If fields is not provided, extract from the data itself
+            if (!fields && data.length > 0) {
+                fields = Object.keys(data[0]);
+            }
+            
+            // Make sure we have valid fields
+            if (!fields || !Array.isArray(fields) || fields.length < 2) {
+                console.error("Invalid fields for minMax data:", fields);
+                return;
+            }
+            
+            // Extract column names (headers) excluding the task name column
+            minMaxHeaders = fields.slice(1);
+            
+            // Update headers in the table
+            updateMinMaxTableHeaders();
+            
+            // Process data
+            data.forEach(row => {
+                const task = row['Metabolic Task'] || row[fields[0]];
+                if (task) {
+                    minMaxData[task] = {};
+                    
+                    // For each column in the row (excluding the task name)
+                    minMaxHeaders.forEach(header => {
+                        minMaxData[task][header] = row[header];
+                    });
+                }
+            });
+        }
+        
+        function updateMinMaxTableHeaders() {
+            // Clear existing headers except the first one
+            const headerRow = minmaxTableHeader.querySelector('tr');
+            while (headerRow.children.length > 1) {
+                headerRow.removeChild(headerRow.lastChild);
+            }
+            
+            // Add new headers
+            minMaxHeaders.forEach(header => {
+                const th = document.createElement('th');
+                th.textContent = header;
+                headerRow.appendChild(th);
+            });
+        }
+        
+        // FIXED: Improved scaling calculation
+        function calculateScaledValues() {
+            // Group data by task to min-max scale within each task
+            const taskGroups = {};
+            
+            // First pass: collect values and find min/max for each task
+            meltedData.forEach(row => {
+                const task = row.metabolic_task;
+                if (!taskGroups[task]) {
+                    taskGroups[task] = {
+                        values: [],
+                        min: Infinity,
+                        max: -Infinity
+                    };
+                }
+                
+                const trimean = row.trimean || 0;
+                taskGroups[task].values.push({
+                    key: `${row.tissue}|${row.cell_type}|${task}`,
+                    value: trimean
+                });
+                
+                // Update min and max values for this task
+                taskGroups[task].min = Math.min(taskGroups[task].min, trimean);
+                taskGroups[task].max = Math.max(taskGroups[task].max, trimean);
+            });
+            
+            // Second pass: calculate scaled values
+            scaledData = { calculated: true, values: {} };
+            
+            Object.keys(taskGroups).forEach(task => {
+                const group = taskGroups[task];
+                const min = group.min;
+                const max = group.max;
+                const range = max - min;
+                
+                group.values.forEach(item => {
+                    // Min-max scaling: (x - min) / (max - min)
+                    // This scales values to range [0, 1] for each task separately
+                    const scaledValue = range === 0 ? 
+                        0 : (item.value - min) / range;
+                    
+                    scaledData.values[item.key] = scaledValue;
+                });
+            });
+            
+            console.log("Scaling completed - scaled values:", Object.keys(scaledData.values).length);
+        }
+        
+        // FIXED: Improved data processing pipeline
+        function processDataForVisualization() {
+            if (meltedData.length === 0) return;
+            
+            // Filter data based on selection
+            let filteredData = meltedData;
+            
+            if (selectedTissues.length > 0) {
+                filteredData = filteredData.filter(d => selectedTissues.includes(d.tissue));
+            }
+            
+            if (selectedCellTypes.length > 0) {
+                filteredData = filteredData.filter(d => selectedCellTypes.includes(d.cell_type));
+            }
+            
+            if (selectedTasks.length > 0) {
+                filteredData = filteredData.filter(d => selectedTasks.includes(d.metabolic_task));
+            }
+            
+            if (searchTerm) {
+                const term = searchTerm.toLowerCase();
+                filteredData = filteredData.filter(d => 
+                    d.metabolic_task.toLowerCase().includes(term) ||
+                    d.tissue.toLowerCase().includes(term) ||
+                    d.cell_type.toLowerCase().includes(term)
+                );
+            }
+            
+            // Apply custom scaling if needed
+            const hasScaledColumn = hasScaledTrimeanColumn();
+            let dataWithScaling = filteredData;
+            
+            if (useScaledValues) {
+                if (!hasScaledColumn && !scaledData.calculated) {
+                    // Calculate scaled values if they haven't been calculated yet
+                    calculateScaledValues();
+                }
+                
+                if (!hasScaledColumn && scaledData.calculated) {
+                    // Add scaled values to the filtered data
+                    dataWithScaling = filteredData.map(row => {
+                        const key = `${row.tissue}|${row.cell_type}|${row.metabolic_task}`;
+                        const scaledValue = scaledData.values[key] !== undefined ? 
+                            scaledData.values[key] : 0;
+                        
+                        return {
+                            ...row,
+                            scaled_trimean: scaledValue
+                        };
+                    });
+                }
+            }
+            
+            // Determine tasks to display
+            const tasksToDisplay = selectedTasks.length > 0 ? 
+                selectedTasks : 
+                [...new Set(dataWithScaling.map(d => d.metabolic_task))].sort();
+                
+            // Group data by tissue and cell type
+            const groupedData = {};
+            const tissueCellTypes = [];
+            
+            dataWithScaling.forEach(d => {
+                const key = `${d.tissue}|${d.cell_type}`;
+                if (!groupedData[key]) {
+                    groupedData[key] = {};
+                    tissueCellTypes.push({ tissue: d.tissue, cellType: d.cell_type });
+                }
+                
+                // Store the full row data for tooltip
+                groupedData[key][d.metabolic_task] = d;
+            });
+            
+            // Sort by tissue, then cell type
+            tissueCellTypes.sort((a, b) => {
+                if (a.tissue !== b.tissue) return a.tissue.localeCompare(b.tissue);
+                return a.cellType.localeCompare(b.cellType);
+            });
+            
+            // Calculate tissue summaries AFTER scaling has been applied
+            const tissueSummaries = {};
+            
+            tissueCellTypes.forEach(({ tissue, cellType }) => {
+                if (!tissueSummaries[tissue]) {
+                    tissueSummaries[tissue] = {};
+                }
+                
+                const key = `${tissue}|${cellType}`;
+                
+                tasksToDisplay.forEach(task => {
+                    if (!tissueSummaries[tissue][task]) {
+                        tissueSummaries[tissue][task] = {
+                            values: [],
+                            scaledValues: [],
+                            count: 0
+                        };
+                    }
+                    
+                    if (groupedData[key] && groupedData[key][task]) {
+                        const row = groupedData[key][task];
+                        tissueSummaries[tissue][task].values.push(row.trimean || 0);
+                        // Use the scaled values that we've calculated
+                        tissueSummaries[tissue][task].scaledValues.push(row.scaled_trimean || 0);
+                        tissueSummaries[tissue][task].count++;
+                    }
+                });
+            });
+            
+            // Calculate means for tissue summaries
+            Object.keys(tissueSummaries).forEach(tissue => {
+                Object.keys(tissueSummaries[tissue]).forEach(task => {
+                    const summary = tissueSummaries[tissue][task];
+                    summary.meanTrimean = summary.values.length > 0 ? 
+                        summary.values.reduce((sum, val) => sum + val, 0) / summary.values.length : 0;
+                    summary.meanScaledTrimean = summary.scaledValues.length > 0 ? 
+                        summary.scaledValues.reduce((sum, val) => sum + val, 0) / summary.scaledValues.length : 0;
+                });
+            });
+            
+            // Store processed data
+            processedData = {
+                tasks: tasksToDisplay,
+                tissueCellTypes,
+                groupedData,
+                tissueSummaries
+            };
+        }
+        
+        function updateUI() {
+            // Update filters
+            updateFilterOptions();
+            
+            // Update tree view
+            updateTreeView();
+            
+            // Update heatmap
+            updateHeatmap();
+            
+            // Update MinMax table
+            updateMinMaxTable();
+        }
+        
+        function updateFilterOptions() {
+            // Clear existing options
+            tissueFilter.innerHTML = '';
+            cellTypeFilter.innerHTML = '';
+            taskFilter.innerHTML = '';
+            
+            // Add "All" option for tissues
+            const allTissueOption = document.createElement('option');
+            allTissueOption.value = "all_tissues";
+            allTissueOption.textContent = "All Tissues";
+            allTissueOption.selected = selectedTissues.length === 0;
+            tissueFilter.appendChild(allTissueOption);
+            
+            // Add tissue options
+            uniqueTissues.forEach(tissue => {
+                const option = document.createElement('option');
+                option.value = tissue;
+                option.textContent = tissue;
+                option.selected = selectedTissues.includes(tissue);
+                tissueFilter.appendChild(option);
+            });
+            
+            // Add "All" option for cell types
+            const allCellTypeOption = document.createElement('option');
+            allCellTypeOption.value = "all_cell_types";
+            allCellTypeOption.textContent = "All Cell Types";
+            allCellTypeOption.selected = selectedCellTypes.length === 0;
+            cellTypeFilter.appendChild(allCellTypeOption);
+            
+            // Add cell type options
+            uniqueCellTypes.forEach(cellType => {
+                const option = document.createElement('option');
+                option.value = cellType;
+                option.textContent = cellType;
+                option.selected = selectedCellTypes.includes(cellType);
+                cellTypeFilter.appendChild(option);
+            });
+            
+            // Add "All" option for tasks
+            const allTaskOption = document.createElement('option');
+            allTaskOption.value = "all_tasks";
+            allTaskOption.textContent = "All Metabolic Tasks";
+            allTaskOption.selected = selectedTasks.length === 0;
+            taskFilter.appendChild(allTaskOption);
+            
+            // Add task options
+            uniqueTasks.forEach(task => {
+                const option = document.createElement('option');
+                option.value = task;
+                option.textContent = task;
+                option.selected = selectedTasks.includes(task);
+                taskFilter.appendChild(option);
+            });
+        }
+        
+        function updateFilters() {
+            // Get selected values
+            let rawSelectedTissues = Array.from(tissueFilter.selectedOptions).map(option => option.value);
+            let rawSelectedCellTypes = Array.from(cellTypeFilter.selectedOptions).map(option => option.value);
+            let rawSelectedTasks = Array.from(taskFilter.selectedOptions).map(option => option.value);
+            
+            // Handle "All" options
+            selectedTissues = rawSelectedTissues.includes("all_tissues") ? [] : rawSelectedTissues;
+            selectedCellTypes = rawSelectedCellTypes.includes("all_cell_types") ? [] : rawSelectedCellTypes;
+            selectedTasks = rawSelectedTasks.includes("all_tasks") ? [] : rawSelectedTasks;
+            
+            searchTerm = searchFilter.value.trim();
+            
+            // Update visualization
+            processDataForVisualization();
+            updateTreeView();
+            updateHeatmap();
+        }
+        
+        function filterTissueOptions() {
+            const searchTerm = tissueSearch.value.toLowerCase().trim();
+            
+            // Hide/show options based on search
+            Array.from(tissueFilter.options).forEach(option => {
+                const value = option.value.toLowerCase();
+                const matches = value.includes(searchTerm);
+                option.style.display = matches ? 'block' : 'none';
+            });
+        }
+        
+        function filterCellTypeOptions() {
+            const searchTerm = cellTypeSearch.value.toLowerCase().trim();
+            
+            // Hide/show options based on search
+            Array.from(cellTypeFilter.options).forEach(option => {
+                const value = option.value.toLowerCase();
+                const matches = value.includes(searchTerm);
+                option.style.display = matches ? 'block' : 'none';
+            });
+        }
+        
+        function filterTaskOptions() {
+            const searchTerm = taskSearch.value.toLowerCase().trim();
+            
+            // Hide/show options based on search
+            Array.from(taskFilter.options).forEach(option => {
+                const value = option.value.toLowerCase();
+                const matches = value.includes(searchTerm);
+                option.style.display = matches ? 'block' : 'none';
+            });
+        }
+        
+        function updateScaledValues() {
+            useScaledValues = scaleValuesCheckbox.checked;
+            
+            // Check if we need to calculate scaled values
+            if (useScaledValues && !hasScaledTrimeanColumn() && !scaledData.calculated) {
+                calculateScaledValues();
+            }
+            
+            // Update heatmap
+            processDataForVisualization();
+            updateHeatmap();
+        }
+        
+        function hasScaledTrimeanColumn() {
+            return meltedData.length > 0 && meltedData[0].scaled_trimean !== undefined;
+        }
+        
+        function updateTreeView() {
+            treeContainer.innerHTML = '';
+            
+            if (!processedData.tissueCellTypes) return;
+            
+            // Group by tissue
+            const tissues = [...new Set(processedData.tissueCellTypes.map(tc => tc.tissue))];
+            
+            // Create tissue nodes
+            tissues.forEach(tissue => {
+                const tissueNode = document.createElement('div');
+                tissueNode.className = 'tree-node tissue-node';
+                tissueNode.dataset.tissue = tissue;
+                tissueNode.dataset.expanded = 'true'; // Default to expanded
+                tissueNode.innerHTML = `
+                    <i class="fas fa-caret-down me-2"></i>
+                    <i class="fas fa-lungs me-1"></i>
+                    <span>${tissue}</span>
+                `;
+                treeContainer.appendChild(tissueNode);
+                
+                // Create cell type nodes for this tissue
+                const cellTypes = processedData.tissueCellTypes
+                    .filter(tc => tc.tissue === tissue)
+                    .map(tc => tc.cellType);
+                
+                const cellTypeContainer = document.createElement('div');
+                cellTypeContainer.className = 'cell-type-container ps-4';
+                cellTypeContainer.dataset.tissue = tissue;
+                cellTypeContainer.style.display = 'block'; // Default to visible
+                
+                cellTypes.forEach(cellType => {
+                    const cellTypeNode = document.createElement('div');
+                    cellTypeNode.className = 'tree-node cell-type-node';
+                    cellTypeNode.dataset.tissue = tissue;
+                    cellTypeNode.dataset.cellType = cellType;
+                    cellTypeNode.innerHTML = `
+                        <i class="fas fa-circle-dot me-1"></i>
+                        <span>${cellType}</span>
+                    `;
+                    cellTypeContainer.appendChild(cellTypeNode);
+                });
+                
+                treeContainer.appendChild(cellTypeContainer);
+                
+                // Add event listener to toggle tissue node
+                tissueNode.addEventListener('click', () => {
+                    const isExpanded = tissueNode.dataset.expanded === 'true';
+                    
+                    // Toggle the caret icon
+                    const caretIcon = tissueNode.querySelector('.fas.fa-caret-down, .fas.fa-caret-right');
+                    caretIcon.classList.toggle('fa-caret-down');
+                    caretIcon.classList.toggle('fa-caret-right');
+                    
+                    // Toggle the expanded state
+                    tissueNode.dataset.expanded = isExpanded ? 'false' : 'true';
+                    
+                    // Toggle the visibility of cell type container
+                    cellTypeContainer.style.display = isExpanded ? 'none' : 'block';
+                    
+                    // Update heatmap
+                    updateHeatmap();
+                });
+            });
+        }
+        
+        // FIXED: Improved heatmap visualization with proper color scaling and now with palette support
+        function updateHeatmap() {
+            heatmapContainer.innerHTML = '';
+            
+            if (!processedData.tasks || processedData.tasks.length === 0 || 
+                !processedData.tissueCellTypes || processedData.tissueCellTypes.length === 0) {
+                heatmapContainer.innerHTML = '<div class="alert alert-info">No data to display. Please select filters or upload data.</div>';
+                return;
+            }
+            
+            // Get visible tissues and cell types from tree
+            const allRows = [];
+            
+            // Get all tissue nodes
+            document.querySelectorAll('.tissue-node').forEach(tissueNode => {
+                const tissue = tissueNode.dataset.tissue;
+                const isExpanded = tissueNode.dataset.expanded === 'true';
+                
+                // Add tissue summary row
+                allRows.push({ 
+                    tissue, 
+                    isSummary: true, 
+                    index: allRows.length 
+                });
+                
+                // If tissue is expanded, add its cell types
+                if (isExpanded) {
+                    const cellTypeContainer = document.querySelector(`.cell-type-container[data-tissue="${tissue}"]`);
+                    if (cellTypeContainer) {
+                        cellTypeContainer.querySelectorAll('.cell-type-node').forEach(cellTypeNode => {
+                            allRows.push({
+                                tissue,
+                                cellType: cellTypeNode.dataset.cellType,
+                                index: allRows.length
+                            });
+                        });
+                    }
+                }
+            });
+            
+            // Set up SVG dimensions with increased margins for labels
+            const margin = { top: 150, right: 50, bottom: 50, left: 200 };
+            const cellSize = 30;
+            const width = processedData.tasks.length * cellSize + margin.left + margin.right;
+            const height = allRows.length * cellSize + margin.top + margin.bottom;
+            
+            // Create SVG container with ID for download functions
+            const svg = d3.select('#heatmap-container')
+                .append('svg')
+                .attr('id', 'heatmap-svg')
+                .attr('width', width)
+                .attr('height', height);
+                
+            // Store reference to SVG for zooming
+            svgElement = svg;
+                
+            // Create a group for the entire heatmap that can be zoomed/panned
+            heatmapGroup = svg.append('g')
+                .attr('transform', `translate(${margin.left},${margin.top}) scale(${zoomLevel})`);
+            
+            // Define color scale using the selected palette
+            const colorScale = d3.scaleSequential(colorPalettes[selectedColorPalette]);
+            
+            // Set default domain, will adjust based on data usage
+            if (useScaledValues) {
+                // For scaled values, always use 0-1 range since that's what min-max scaling produces
+                colorScale.domain([0, 1]);
+            } else {
+                // For unscaled values, we'll set domain based on data values
+                colorScale.domain([0, 1]); // Initial default, will be updated
+            }
+            
+            // Create heatmap cells
+            const cells = [];
+            
+            // Add cells for all visible rows (tissues and cell types)
+            allRows.forEach((row, rowIndex) => {
+                processedData.tasks.forEach((task, colIndex) => {
+                    if (row.isSummary) {
+                        // Tissue summary cell
+                        if (!processedData.tissueSummaries[row.tissue] || !processedData.tissueSummaries[row.tissue][task]) {
+                            return;
+                        }
+                        
+                        const summary = processedData.tissueSummaries[row.tissue][task];
+                        const value = useScaledValues ? summary.meanScaledTrimean : summary.meanTrimean;
+                        
+                        cells.push({
+                            row: rowIndex,
+                            col: colIndex,
+                            task,
+                            tissue: row.tissue,
+                            cellType: 'Tissue Summary',
+                            value,
+                            isSummary: true,
+                            data: {
+                                metabolic_task: task,
+                                tissue: row.tissue,
+                                cell_type: 'Tissue Summary',
+                                trimean: summary.meanTrimean,
+                                scaled_trimean: summary.meanScaledTrimean,
+                                n_cells_nonzero: summary.count
+                            }
+                        });
+                    } else {
+                        // Cell type cell
+                        const key = `${row.tissue}|${row.cellType}`;
+                        if (processedData.groupedData[key] && processedData.groupedData[key][task]) {
+                            const data = processedData.groupedData[key][task];
+                            const value = useScaledValues && data.scaled_trimean !== undefined ? 
+                                data.scaled_trimean : data.trimean;
+                            
+                            cells.push({
+                                row: rowIndex,
+                                col: colIndex,
+                                task,
+                                tissue: row.tissue,
+                                cellType: row.cellType,
+                                value,
+                                data
+                            });
+                        }
+                    }
+                });
+            });
+            
+            // Update color scale domain if not using scaled values
+            if (!useScaledValues && cells.length > 0) {
+                const values = cells.map(cell => cell.value).filter(value => value !== undefined);
+                if (values.length > 0) {
+                    const minValue = d3.min(values);
+                    const maxValue = d3.max(values);
+                    colorScale.domain([minValue, maxValue]);
+                }
+            }
+            
+            // Add color bar with appropriate range based on selected palette
+            const colorBar = document.createElement('div');
+            colorBar.className = 'color-bar';
+            
+            // Set the gradient based on the current color scale domain
+            const [minDomain, maxDomain] = colorScale.domain();
+            colorBar.style.background = `linear-gradient(to bottom, ${colorScale(maxDomain)}, ${colorScale(minDomain)})`;
+            heatmapContainer.appendChild(colorBar);
+            
+            // Add labels for color bar
+            const colorBarLabels = document.createElement('div');
+            colorBarLabels.className = 'color-bar-labels';
+            
+            // Function to format values nicely
+            const formatValue = (val) => {
+                if (Math.abs(val) == 0.0) return val.toFixed(2);
+                if (Math.abs(val) < 0.001) return val.toExponential(2);
+                if (Math.abs(val) < 0.01) return val.toFixed(4);
+                if (Math.abs(val) < 0.1) return val.toFixed(3);
+                if (Math.abs(val) < 1) return val.toFixed(2);
+                if (Math.abs(val) < 10) return val.toFixed(2);
+                return Math.round(val);
+            };
+            
+            // Add 5 labels at equal intervals based on the current domain
+            const steps = 5;
+            for (let i = 0; i < steps; i++) {
+                const percent = i / (steps - 1);
+                const value = maxDomain - percent * (maxDomain - minDomain);
+                
+                const label = document.createElement('div');
+                label.className = 'color-bar-label';
+                label.style.top = `${percent * 100}%`;
+                label.textContent = formatValue(value);
+                colorBarLabels.appendChild(label);
+            }
+            
+            heatmapContainer.appendChild(colorBarLabels);
+            
+            // Draw cells
+            heatmapGroup.selectAll('.heatmap-cell')
+                .data(cells)
+                .enter()
+                .append('rect')
+                .attr('class', 'heatmap-cell')
+                .attr('x', d => d.col * cellSize)
+                .attr('y', d => d.row * cellSize)
+                .attr('width', cellSize)
+                .attr('height', cellSize)
+                .attr('fill', d => d.value !== undefined ? colorScale(d.value) : '#eee')
+                .attr('stroke', d => d.isSummary ? '#333' : '#fff')
+                .attr('stroke-width', d => d.isSummary ? 2 : 1)
+                .attr('data-is-summary', d => d.isSummary)  // Add data attribute to track summary cells
+                .on('mouseover', function(event, d) {
+                    // Highlight cell
+                    d3.select(this)
+                        .attr('stroke', '#333')
+                        .attr('stroke-width', 2);
+                    
+                    // Update info in the bottom panel
+                    const cellInfo = document.getElementById('cell-info');
+                    
+                    // Clear previous info
+                    cellInfo.innerHTML = '';
+                    
+                    // Add cell information items
+                    const addInfoItem = (label, value) => {
+                        if (value !== undefined) {
+                            const item = document.createElement('div');
+                            item.className = 'cell-info-item';
+                            item.innerHTML = `<span class="cell-info-label">${label}:</span> ${value}`;
+                            cellInfo.appendChild(item);
+                        }
+                    };
+                    
+                    // Add basic info
+                    addInfoItem('Task', d.task);
+                    addInfoItem('Tissue', d.tissue);
+                    addInfoItem('Cell Type', d.cellType);
+                    addInfoItem('Trimean', d.data.trimean?.toFixed(4) || 'N/A');
+                    
+                    // Add additional info if available
+                    if (d.data.scaled_trimean !== undefined) {
+                        addInfoItem('Scaled Trimean', d.data.scaled_trimean.toFixed(4));
+                    }
+                    
+                    if (d.data.variance !== undefined) {
+                        addInfoItem('Variance', d.data.variance.toFixed(4));
+                    }
+                    
+                    if (d.data.std !== undefined) {
+                        addInfoItem('Std Dev', d.data.std.toFixed(4));
+                    }
+                    
+                    if (d.data.n_cells_threshold !== undefined) {
+                        addInfoItem('Cells Threshold', d.data.n_cells_threshold);
+                    }
+                    
+                    if (d.data.n_cells_nonzero !== undefined) {
+                        addInfoItem('Cells Non-Zero', d.data.n_cells_nonzero);
+                    }
+                    
+                    if (d.data.total_cells !== undefined) {
+                        addInfoItem('Total Cells', d.data.total_cells);
+                    }
+                })
+                .on('mouseout', function() {
+                    // Reset cell appearance
+                    d3.select(this)
+                        .attr('stroke', d => d.isSummary ? '#333' : '#fff')
+                        .attr('stroke-width', d => d.isSummary ? 2 : 1);
+                    
+                    // Reset info panel
+                    document.getElementById('cell-info').innerHTML = '<div class="cell-info-item"><span class="cell-info-label">Hover over cells to see details</span></div>';
+                });
+            
+            // Add row labels (tissue and cell type)
+            heatmapGroup.selectAll('.row-label')
+                .data(allRows)
+                .enter()
+                .append('text')
+                .attr('class', 'row-label')
+                .attr('x', -10)
+                .attr('y', (d, i) => i * cellSize + cellSize / 2)
+                .attr('text-anchor', 'end')
+                .attr('alignment-baseline', 'middle')
+                .attr('font-weight', d => d.isSummary ? 'bold' : 'normal')
+                .text(d => d.isSummary ? d.tissue : d.cellType);
+            
+            // Properly align labels with reduced spacing
+            heatmapGroup.selectAll('.col-label')
+                .data(processedData.tasks)
+                .enter()
+                .append('text')
+                .attr('class', 'col-label')
+                .attr('transform', (d, i) => {
+                    // Position at the center of the cell, closer to the heatmap
+                    const x = i * cellSize + (cellSize / 2);
+                    const y = -10; // Less space above the heatmap
+                    return `translate(${x}, ${y}) rotate(-45)`;
+                })
+                .attr('text-anchor', 'start') // Start anchor so text extends away from heatmap
+                .style('font-size', '11px')
+                .text(d => d);
+        }
+        
+        function updateMinMaxTable() {
+            minmaxTableBody.innerHTML = '';
+            
+            if (!minMaxData || Object.keys(minMaxData).length === 0) {
+                minmaxTableBody.innerHTML = '<tr><td colspan="5">No Min/Max data available. Please upload a Min/Max CSV file.</td></tr>';
+                return;
+            }
+            
+            // Get search term
+            const searchTerm = minmaxTaskFilter.value.toLowerCase().trim();
+            
+            // Filter tasks based on search
+            const tasks = Object.keys(minMaxData).sort();
+            const filteredTasks = searchTerm ? 
+                tasks.filter(task => task.toLowerCase().includes(searchTerm)) : 
+                tasks;
+            
+            // Create rows for each task
+            filteredTasks.forEach(task => {
+                const row = document.createElement('tr');
+                
+                // Task name
+                const taskCell = document.createElement('td');
+                taskCell.textContent = task;
+                row.appendChild(taskCell);
+                
+                // Add cells for each header
+                minMaxHeaders.forEach(header => {
+                    const cell = document.createElement('td');
+                    if (minMaxData[task] && minMaxData[task][header] !== undefined) {
+                        const value = minMaxData[task][header];
+                        cell.textContent = typeof value === 'number' ? value.toFixed(4) : value;
+                    } else {
+                        cell.textContent = 'N/A';
+                    }
+                    row.appendChild(cell);
+                });
+                
+                minmaxTableBody.appendChild(row);
+            });
+        }
+        
+        function filterMinMaxTable() {
+            updateMinMaxTable();
+        }
+        
+        function showNotification(message, type = 'info', position = 'bottom-right') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+            
+            // Set different positions based on parameter
+            if (position === 'upper-center') {
+                // Upper center position
+                alertDiv.style.top = '20px';
+                alertDiv.style.left = '50%';
+                alertDiv.style.transform = 'translateX(-50%)';
+                alertDiv.style.maxWidth = '80%'; // Prevent full width on small screens
+            } else if (position === 'bottom-right') {
+                // Bottom right position (above info panel)
+                alertDiv.style.bottom = '85px'; // Above the 70px info panel with some margin
+                alertDiv.style.right = '20px';
+            } else {
+                // Default upper right (original position)
+                alertDiv.style.top = '20px';
+                alertDiv.style.right = '20px';
+            }
+            
+            alertDiv.style.zIndex = '9999';
+            
+            // Add a max-width for better readability
+            alertDiv.style.maxWidth = '600px';
+            
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            
+            document.body.appendChild(alertDiv);
+            
+            // Auto-dismiss after 5 seconds
+            setTimeout(() => {
+                alertDiv.classList.remove('show');
+                setTimeout(() => alertDiv.remove(), 300);
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
