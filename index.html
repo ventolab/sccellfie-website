@@ -1808,24 +1808,56 @@
                 .attr('data-is-summary', d => d.isSummary)
                 .on('mouseover', function(event, d) {
                     d3.select(this).attr('stroke', '#333').attr('stroke-width', 2);
-                    const cellInfo = document.getElementById('cell-info'); cellInfo.innerHTML = '';
+                    
+                    // Update info in the bottom panel
+                    const cellInfo = document.getElementById('cell-info');
+                    
+                    // Clear previous info
+                    cellInfo.innerHTML = '';
+                    
+                    // Add cell information items - FIXED version
                     const addInfoItem = (label, value) => {
-                         const item = document.createElement('div'); item.className = 'cell-info-item';
-                         let displayValue = (value !== undefined && value !== null && isFinite(value)) ? value : 'N/A';
-                         if (typeof displayValue === 'number') { displayValue = formatValue(displayValue); }
-                         item.innerHTML = `<span class="cell-info-label">${label}:</span> ${displayValue}`; cellInfo.appendChild(item);
+                        let displayValue;
+                        
+                        // Handle different value types appropriately
+                        if (typeof value === 'string') {
+                            displayValue = value; // Keep strings as-is
+                        } else if (value !== undefined && value !== null && isFinite(value)) {
+                            // Format numbers appropriately 
+                            displayValue = typeof value === 'number' ? formatValue(value) : value;
+                        } else {
+                            displayValue = 'N/A';
+                        }
+                        
+                        const item = document.createElement('div');
+                        item.className = 'cell-info-item';
+                        item.innerHTML = `<span class="cell-info-label">${label}:</span> ${displayValue}`;
+                        cellInfo.appendChild(item);
                     };
-                    addInfoItem('Task', d.task); addInfoItem('Tissue', d.tissue); addInfoItem('Cell Type', d.cellType);
-                    addInfoItem('Value', d.value); // Show the value being plotted
+                    
+                    // Add basic info (these are strings and should be displayed as-is)
+                    addInfoItem('Task', d.task);
+                    addInfoItem('Tissue', d.tissue);
+                    addInfoItem('Cell Type', d.cellType);
+                    
+                    // Add numeric values (will be formatted)
+                    addInfoItem('Value', d.value); 
                     addInfoItem('Trimean', d.data.trimean);
-                    if (d.data.hasOwnProperty('scaled_trimean')) { addInfoItem('Scaled Trimean', d.data.scaled_trimean); }
+                    
+                    // Add additional info if available
+                    if (d.data.hasOwnProperty('scaled_trimean')) {
+                        addInfoItem('Scaled Trimean', d.data.scaled_trimean);
+                    }
+                    
+                    // Check for other optional properties
                     const optionalCols = ['variance', 'std', 'n_cells_threshold', 'n_cells_nonzero', 'total_cells'];
-                    optionalCols.forEach(col => { if (d.data.hasOwnProperty(col)) { const label = col.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()); addInfoItem(label, d.data[col]); } });
-                 })
-                 .on('mouseout', function() {
-                     d3.select(this).attr('stroke', d => d.isSummary ? '#333' : '#fff').attr('stroke-width', d => d.isSummary ? 2 : 1);
-                     document.getElementById('cell-info').innerHTML = '<div class="cell-info-item"><span class="cell-info-label">Hover over cells to see details</span></div>';
-                 });
+                    optionalCols.forEach(col => {
+                        if (d.data.hasOwnProperty(col)) {
+                            const label = col.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                            addInfoItem(label, d.data[col]);
+                        }
+                    });
+                })
 
             // --- Add Row Labels ---
             heatmapGroup.selectAll('.row-label').remove(); // Clear previous labels
