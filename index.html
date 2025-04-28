@@ -14,7 +14,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    
+
     <style>
         :root {
             --primary-color: #0066cc;
@@ -24,7 +24,7 @@
             --hover-color: #3399ff;
             --border-color: #ddd;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
@@ -36,11 +36,11 @@
             position: relative;
             min-height: 100vh;
         }
-        
+
         .container-fluid {
             padding: 20px;
         }
-        
+
         header {
             background-color: white;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -63,13 +63,13 @@
         header .container-fluid {
             padding-top: 20px; /* Reset for the container inside the header */
         }
-        
+
         .logo-container {
             display: flex;
             align-items: flex-start; /* Align items to the top */
             justify-content: space-between; /* Space between logo and download button */
         }
-        
+
         .logo-title-container {
             display: flex;
             align-items: flex-start;
@@ -88,13 +88,13 @@
             margin: 0;
             align-self: center; /* Center the title vertically */
         }
-        
+
         .header-buttons {
             display: flex;
             align-items: center;
             gap: 15px;
         }
-        
+
         .download-data-btn {
             align-self: center;
             background-color: var(--primary-color);
@@ -106,11 +106,11 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-        
+
         .download-data-btn:hover {
             background-color: var(--hover-color);
         }
-        
+
         .github-btn {
             display: flex;
             align-items: center;
@@ -124,13 +124,13 @@
             text-decoration: none;
             transition: all 0.3s ease;
         }
-        
+
         .github-btn:hover {
             background-color: #555;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        
+
         .card {
             background-color: white;
             border-radius: 8px;
@@ -138,7 +138,7 @@
             margin-bottom: 20px;
             border: none;
         }
-        
+
         .card-header {
             background-color: var(--primary-color);
             color: white;
@@ -146,11 +146,11 @@
             border-radius: 8px 8px 0 0 !important;
             padding: 12px 20px;
         }
-        
+
         .card-body {
             padding: 20px;
         }
-        
+
         .upload-area {
             border: 2px dashed var(--border-color);
             border-radius: 5px;
@@ -160,34 +160,34 @@
             background-color: rgba(200, 200, 200, 0.2);
             transition: all 0.3s ease;
         }
-        
+
         .upload-area:hover {
             border-color: var(--primary-color);
             background-color: rgba(200, 200, 200, 0.4);
         }
-        
+
         .upload-icon {
             font-size: 48px;
             color: var(--primary-color);
             margin-bottom: 15px;
         }
-        
+
         .upload-text {
             font-size: 1.1rem;
             margin-bottom: 15px;
         }
-        
+
         .btn-primary {
             background-color: var(--primary-color);
             border: none;
             padding: 8px 20px;
             font-weight: 500;
         }
-        
+
         .btn-primary:hover {
             background-color: var(--hover-color);
         }
-        
+
         /* Separator line for OR text */
         .separator {
             display: flex;
@@ -196,22 +196,22 @@
             margin: 20px 0;
             color: #777;
         }
-        
+
         .separator::before,
         .separator::after {
             content: '';
             flex: 1;
             border-bottom: 1px solid #ddd;
         }
-        
+
         .separator::before {
             margin-right: 10px;
         }
-        
+
         .separator::after {
             margin-left: 10px;
         }
-        
+
         /* Load sample data button */
         .load-sample-btn {
             background-color: #24292e;
@@ -224,17 +224,17 @@
             transition: all 0.3s ease;
             margin-bottom: 20px;
         }
-        
+
         .load-sample-btn:hover {
             background-color: #555;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        
+
         .nav-tabs {
             border-bottom: 1px solid var(--border-color);
         }
-        
+
         .nav-tabs .nav-link {
             color: var(--text-color);
             border: none;
@@ -242,97 +242,99 @@
             margin-right: 5px;
             font-weight: 500;
         }
-        
+
         .nav-tabs .nav-link.active {
             color: var(--primary-color);
             border-bottom: 3px solid var(--primary-color);
             background-color: transparent;
         }
-        
+
         .filter-section {
             display: flex;
             flex-wrap: wrap;
             gap: 15px;
             margin-bottom: 20px;
         }
-        
+
         .filter-dropdown {
             flex: 1;
             min-width: 200px;
         }
-        
+
         .form-control, .form-select {
             border-radius: 5px;
             border: 1px solid var(--border-color);
             padding: 8px 12px;
         }
-        
+
         .tree-container {
             overflow-y: auto;
             max-height: 600px;
             border-right: 1px solid var(--border-color);
         }
-        
+
         .heatmap-container {
-            overflow: auto;
+            overflow: auto; /* Needed for scrollbars when SVG resizes */
             max-height: 600px;
-            position: relative;
+            position: relative; /* Needed for absolute positioning of color bar */
+            border: 1px solid var(--border-color); /* Optional: visualize container bounds */
+            padding: 5px; /* Optional: space around SVG */
         }
-        
+
         .tree-node {
             padding: 5px 0;
             cursor: pointer;
             display: flex;
             align-items: center;
         }
-        
+
         .tree-node i {
             margin-right: 5px;
             color: var(--primary-color);
         }
-        
+
         .tree-node:hover {
             background-color: rgba(98, 0, 238, 0.05);
         }
-        
+
         .tree-node.selected {
             background-color: rgba(98, 0, 238, 0.1);
             font-weight: 500;
         }
-        
+
         .heatmap-cell {
             stroke: white;
             stroke-width: 1px;
         }
-        
+
         .heatmap-cell:hover {
             stroke: var(--primary-color);
             stroke-width: 2px;
         }
-        
+
         .summary-row {
             font-weight: 600;
         }
-        
+
         .minmax-table-container {
             max-height: 600px;
             overflow-y: auto;
         }
-        
+
         .minmax-table th {
             position: sticky;
             top: 0;
             background-color: white;
             z-index: 10;
         }
-        
+
         .loading-indicator {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 200px;
         }
-        
+
         .spinner {
             width: 40px;
             height: 40px;
@@ -341,38 +343,39 @@
             border-top: 4px solid var(--primary-color);
             animation: spin 1s linear infinite;
         }
-        
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
+
         /* Color Bar Styles */
         .color-bar {
-            position: absolute; 
+            position: absolute;
             top: 20px;
             left: 10px;
             width: 20px;
             height: 200px;
             border: 1px solid #ccc;
             background: linear-gradient(to bottom, #6a0dad, #f8dae9);
-            z-index: 10;
+            z-index: 10; /* Ensure it's above SVG if SVG had background */
         }
-        
+
         .color-bar-labels {
             position: absolute;
             top: 20px;
             left: 35px;
             height: 200px;
+            z-index: 10; /* Ensure it's above SVG if SVG had background */
         }
-        
+
         .color-bar-label {
             position: absolute;
             font-size: 10px;
             transform: translateY(-50%);
             white-space: nowrap;
         }
-        
+
         /* Info panel at the bottom */
         .info-panel {
             position: fixed;
@@ -387,7 +390,7 @@
             display: flex;
             height: 70px; /* Slightly reduced height */
         }
-        
+
         .cell-info {
             flex: 1;
             display: flex;
@@ -396,17 +399,17 @@
             overflow-y: auto;
             padding-right: 20px;
         }
-        
+
         .cell-info-item {
             margin-right: 15px;
             white-space: nowrap;
         }
-        
+
         .cell-info-label {
             font-weight: bold;
             margin-right: 5px;
         }
-        
+
         .controls-container {
             display: flex;
             align-items: center;
@@ -414,21 +417,21 @@
             padding-left: 20px;
             border-left: 1px solid var(--border-color);
         }
-        
+
         .color-palette-container {
             display: flex;
             align-items: center;
             gap: 10px;
             margin-right: 15px;
         }
-        
+
         .color-palette-label {
             font-size: 0.85rem;
             margin-bottom: 0;
             font-weight: 500;
             white-space: nowrap;
         }
-        
+
         .color-palette-select {
             max-width: 140px;
             min-width: 140px;
@@ -436,19 +439,19 @@
             font-size: 0.85rem;
             padding: 0 10px;
         }
-        
+
         .zoom-controls {
             display: flex;
             align-items: center;
             gap: 5px;
         }
-        
+
         .download-controls {
             display: flex;
             align-items: center;
             gap: 5px;
         }
-        
+
         .control-btn {
             height: 30px;
             display: flex;
@@ -462,27 +465,27 @@
             padding: 0 10px;
             font-size: 0.85rem;
         }
-        
+
         .zoom-btn {
             width: 30px;
             padding: 0;
         }
-        
+
         .control-btn:hover {
             background-color: var(--hover-color);
             color: white;
         }
-        
+
         .download-btn {
             background-color: var(--primary-color);
             color: white;
         }
-        
+
         .download-btn:hover {
             background-color: var(--hover-color);
             opacity: 0.9;
         }
-        
+
         /* Sample palette colors for dropdown */
         .palette-preview {
             width: 16px;
@@ -492,7 +495,7 @@
             vertical-align: middle;
             border: 1px solid #ccc;
         }
-        
+
         .palette-preview-rdpu { background: linear-gradient(to right, #feebe2, #6a0dad); }
         .palette-preview-viridis { background: linear-gradient(to right, #440154, #fde725); }
         .palette-preview-inferno { background: linear-gradient(to right, #000004, #fcffa4); }
@@ -503,7 +506,7 @@
         .palette-preview-ylrd { background: linear-gradient(to right, #ffffcc, #800026); }
         .palette-preview-bugn { background: linear-gradient(to right, #f7fcfd, #00441b); }
         .palette-preview-spectral { background: linear-gradient(to right, #9e0142, #5e4fa2); }
-        
+
         /* Footer styles */
         .footer {
             position: relative;
@@ -516,34 +519,34 @@
             margin-top: 30px;
             margin-bottom: 45px; /* Reduced space below footer for info panel */
         }
-        
+
         .footer a {
             color: var(--secondary-color);
             text-decoration: none;
         }
-        
+
         .footer a:hover {
             text-decoration: underline;
         }
-        
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .filter-dropdown {
                 min-width: 100%;
             }
-            
+
             .tree-container {
                 border-right: none;
                 border-bottom: 1px solid var(--border-color);
                 max-height: 300px;
             }
-            
+
             .info-panel {
                 flex-direction: column;
                 height: auto;
                 padding-bottom: 5px;
             }
-            
+
             .controls-container {
                 border-left: none;
                 border-top: 1px solid var(--border-color);
@@ -552,31 +555,31 @@
                 margin-top: 10px;
                 flex-wrap: wrap;
             }
-            
+
             .color-palette-container {
                 margin-bottom: 10px;
                 width: 100%;
             }
-            
+
             .logo-container {
                 flex-direction: column;
                 align-items: center;
             }
-            
+
             .header-buttons {
                 margin-top: 15px;
                 gap: 10px;
             }
-            
+
             .download-data-btn {
                 font-size: 0.9rem;
                 padding: 6px 12px;
             }
-            
+
             .footer {
                 margin-bottom: 80px; /* Reduced space for mobile */
             }
-            
+
             body {
                 padding-bottom: 120px; /* More padding for taller info panel on mobile */
             }
@@ -602,7 +605,7 @@
             </div>
         </div>
     </header>
-    
+
     <div class="container-fluid">
         <!-- File Upload Section -->
         <div class="card">
@@ -612,12 +615,28 @@
             <div class="card-body">
                 <!-- CSV FORMAT EXPLANATION: Edit this section to modify the data format instructions -->
                 <div class="alert alert-info mb-3">
+
+                    <h5 class="alert-heading">Visualizer Notice:</h5>
+                    <p class="mb-3">
+                        This website serves only as a visualizer for the predictions generated using our 
+                        <a href="https://sccellfie.readthedocs.io" target="_blank" style="color: #0066cc; text-decoration: none;">scCellFie tool</a>. Additionally, precomputed metabolic scores across the CZI's human cell atlas can be visualized using the <em>Load CZI CELLxGENE</em> button, or downloaded by clicking on the <em>Download Dataset</em> button.
+                    </p>
+                
                     <h5 class="alert-heading">Expected CSV Formats:</h5>
                     <p class="mb-1"><strong>Melted Results CSV:</strong> Should contain columns for <code>tissue</code>, <code>cell_type</code>, <code>metabolic_task</code>, <code>trimean</code> and optionally <code>scaled_trimean</code>. Additional numerical columns will be shown in the cell details.</p>
-                    <p class="mb-0"><strong>Min/Max CSV:</strong> Should contain metabolic tasks in rows or columns, with values for minimum and maximum thresholds. The tool will attempt to detect and transpose if needed.</p>
+                
+                    <p class="mb-1"><strong>Min/Max CSV:</strong> Should contain metabolic tasks in rows or columns, with values for minimum and maximum thresholds. The tool will attempt to detect and transpose if needed.</p>
+                
+                    <p class="mb-0">
+                        <strong>Note:</strong> 
+                        <em>These files can be generated using our scCellFie tool, as detailed in 
+                            <a href="https://sccellfie.readthedocs.io/en/latest/notebooks/visualizer.html" target="_blank" style="color: #0066cc; text-decoration: none;">this tutorial</a>.
+                             Here the predictions are summarized into a cell-group level, losing single-cell resolution. For visualizations at a single-cell resolution, please refer to <a href="https://sccellfie.readthedocs.io" target="_blank">our tutorials</a>.
+                        </em>
+                    </p>
                 </div>
                 <!-- END OF CSV FORMAT EXPLANATION -->
-                
+
                 <div class="upload-area" id="upload-area">
                     <i class="fas fa-cloud-upload-alt upload-icon"></i>
                     <!-- UPLOAD TEXT: Edit this to modify the upload instructions -->
@@ -626,22 +645,22 @@
                     <input type="file" id="file-upload" class="d-none" accept=".csv" multiple>
                     <button class="btn btn-primary" id="browse-files">Browse Files</button>
                 </div>
-                
+
                 <!-- OR separator and CZI data button -->
                 <div class="separator">OR</div>
-                
+
                 <div class="text-center">
                     <button id="load-czi-data" class="load-sample-btn">
                         <i class="fas fa-database me-2"></i>Load CZI CELLxGENE
                     </button>
                 </div>
-                
+
                 <div class="uploaded-files" id="uploaded-files">
                     <!-- Uploaded file list will be displayed here -->
                 </div>
             </div>
         </div>
-        
+
         <!-- Tabs Navigation -->
         <ul class="nav nav-tabs" id="dataTabs" role="tablist">
             <li class="nav-item" role="presentation">
@@ -655,7 +674,7 @@
                 </button>
             </li>
         </ul>
-        
+
         <!-- Tab Content -->
         <div class="tab-content" id="dataTabsContent">
             <!-- Heatmap Visualization Tab -->
@@ -698,14 +717,14 @@
                                 <input type="text" id="search-filter" class="form-control" placeholder="Search all fields...">
                             </div>
                         </div>
-                        
+
                         <div class="form-check mb-3">
                             <input class="form-check-input" type="checkbox" id="scale-values">
                             <label class="form-check-label" for="scale-values">
                                 Use scaled values
                             </label>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="tree-container" id="tree-container">
@@ -718,11 +737,11 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div id="tooltip-container" class="tooltip-container" style="display: none;">
                             <!-- Tooltip content will be populated dynamically -->
                         </div>
-                        
+
                         <!-- Info Panel for Cell Details -->
                         <div class="info-panel" id="info-panel">
                             <div class="cell-info" id="cell-info">
@@ -781,7 +800,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- MinMax Data Tab -->
             <div class="tab-pane fade" id="minmax-pane" role="tabpanel" aria-labelledby="minmax-tab">
                 <div class="card">
@@ -795,7 +814,7 @@
                                 <input type="text" id="minmax-task-filter" class="form-control" placeholder="Search for tasks...">
                             </div>
                         </div>
-                        
+
                         <div class="minmax-table-container">
                             <table class="table table-striped table-hover minmax-table" id="minmax-table">
                                 <thead id="minmax-table-header">
@@ -814,7 +833,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Footer - You can replace this content with your own copyright information -->
     <footer class="footer">
         <div class="container">
@@ -830,10 +849,10 @@
             </div>
         </div>
     </footer>
-    
+
     <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    
+
     <script>
         // Global variables to store data
         let meltedData = [];
@@ -854,11 +873,12 @@
         let svgElement = null; // Store reference to the SVG element
         let heatmapGroup = null; // Store reference to the group that will be zoomed
         let selectedColorPalette = "interpolateBlues"; // Default color palette
-        
+        let currentCellSize = 30; // Base cell size for calculations
+
         // URLs for the CZI CELLxGENE data files
         const CZI_MELTED_DATA_URL = "https://raw.githubusercontent.com/ventolab/sccellfie-website/refs/heads/main/data/CELLxGENEMetabolicTasksMeltedResults.csv";
         const CZI_MINMAX_DATA_URL = "https://raw.githubusercontent.com/ventolab/sccellfie-website/refs/heads/main/data/CELLxGENEMetabolicTasksMinMax.csv";
-        
+
         // DOM Elements
         const fileUploadInput = document.getElementById('file-upload');
         const browseFilesBtn = document.getElementById('browse-files');
@@ -882,7 +902,7 @@
         const colorPaletteSelect = document.getElementById('color-palette');
         const loadCziDataBtn = document.getElementById('load-czi-data');
         const downloadDatasetBtn = document.getElementById('download-dataset-btn');
-        
+
         // Define mapping of palette names to color functions
         const colorPalettes = {
             "interpolateRdPu": d3.interpolateRdPu,
@@ -896,314 +916,265 @@
             "interpolateBuGn": d3.interpolateBuGn,
             "interpolateSpectral": d3.interpolateSpectral
         };
-        
+
         // Global zoom functions
         function zoomIn() {
             zoomLevel *= 1.2;
             applyZoom();
         }
-        
+
         function zoomOut() {
             zoomLevel /= 1.2;
-            if (zoomLevel < 0.1) zoomLevel = 0.1;
+            if (zoomLevel < 0.1) zoomLevel = 0.1; // Prevent zooming out too much
             applyZoom();
         }
-        
+
         function resetZoom() {
             zoomLevel = 1;
             applyZoom();
         }
-        
-        // Download functions
+
+        // --- UPDATED applyZoom for interactive resizing ---
+        function applyZoom() {
+            if (svgElement && heatmapGroup && processedData.tasks && processedData.tissueCellTypes) {
+                const margin = { top: 150, right: 50, bottom: 50, left: 200 };
+                const cellSize = currentCellSize; // Use the base cell size
+
+                // 1. Apply the scale/translate transform to the inner group
+                heatmapGroup.attr('transform', `translate(${margin.left},${margin.top}) scale(${zoomLevel})`);
+
+                // 2. Calculate the dimensions needed for the SVG viewport
+                // Determine the number of rows currently displayed (based on tree state)
+                let displayedRowCount = 0;
+                document.querySelectorAll('.tissue-node').forEach(tissueNode => {
+                    const tissue = tissueNode.dataset.tissue;
+                    if (!processedData.tissueSummaries[tissue]) return; // Skip if tissue not in current data
+
+                    displayedRowCount++; // Count tissue summary row
+                    const isExpanded = tissueNode.dataset.expanded === 'true';
+                    if (isExpanded) {
+                        const cellTypeContainer = document.querySelector(`.cell-type-container[data-tissue="${CSS.escape(tissue)}"]`);
+                        if (cellTypeContainer) {
+                           cellTypeContainer.querySelectorAll('.cell-type-node').forEach(cellTypeNode => {
+                               // Count only if cell type is actually in the processed data
+                                const key = `${tissue}|${cellTypeNode.dataset.cellType}`;
+                                if(processedData.groupedData[key]) {
+                                     displayedRowCount++;
+                                }
+                           });
+                        }
+                    }
+                });
+
+                const taskCount = processedData.tasks.length;
+
+                // Calculate content dimensions at the current zoom level
+                const contentWidth = taskCount * cellSize * zoomLevel;
+                const contentHeight = displayedRowCount * cellSize * zoomLevel;
+
+                // Calculate total SVG dimensions including margins
+                // Margins are NOT scaled by zoom, they are fixed space around the scaled content area
+                const svgWidth = margin.left + contentWidth + margin.right;
+                const svgHeight = margin.top + contentHeight + margin.bottom;
+
+                // 3. Update the width and height attributes of the main SVG element
+                svgElement
+                    .attr('width', Math.max(1, svgWidth)) // Ensure positive dimensions
+                    .attr('height', Math.max(1, svgHeight));
+
+                // Optional: Set viewBox if needed, though width/height might suffice here
+                // The viewBox would need careful calculation if you want the origin to shift
+                // svgElement.attr('viewBox', `0 0 ${svgWidth} ${svgHeight}`);
+            }
+        }
+
+
+        // Download functions (Using version that calculates bounds on clone)
         function downloadSVG() {
-            if (!svgElement) {
-                                    showNotification('No visualization to download. Please select data first.', 'warning', 'bottom-right');
+            if (!svgElement || !heatmapGroup) {
+                showNotification('No visualization to download.', 'warning', 'bottom-right');
                 return;
             }
-            
             try {
-                // Get the SVG element
-                const svgElement = document.querySelector('#heatmap-svg');
-                if (!svgElement) {
-                    showNotification('Could not find SVG element to download', 'warning', 'bottom-right');
-                    return;
-                }
-                
-                // Create a clone of the SVG to modify
-                const svgClone = svgElement.cloneNode(true);
-                
-                // Make all cells have consistent white borders for export
+                // --- Clone the CURRENT state of the interactive SVG ---
+                // This clone will have the width/height set by the last applyZoom call
+                const originalSvg = document.querySelector('#heatmap-svg');
+                if (!originalSvg) { showNotification('Cannot find SVG element.', 'warning'); return; }
+                const svgClone = originalSvg.cloneNode(true);
+                const groupClone = svgClone.querySelector('g'); // Assumes first 'g' is heatmapGroup
+                if (!groupClone) { showNotification('Cannot find SVG group element.', 'warning'); return; }
+
+                // --- Ensure the transform is explicitly set on the clone's group ---
+                // (Cloning might not perfectly capture computed transforms in all cases)
+                const margin = { top: 150, right: 50, bottom: 50, left: 200 };
+                groupClone.setAttribute('transform', `translate(${margin.left},${margin.top}) scale(${zoomLevel})`);
+
+                // --- Standardize cell borders on the clone ---
                 svgClone.querySelectorAll('.heatmap-cell').forEach(cell => {
-                    // For exports, we want all cells to have white borders
                     cell.setAttribute('stroke', '#fff');
                     cell.setAttribute('stroke-width', '1');
                 });
-                
-                // Add namespaces for SVG
+
+                // --- Add Namespaces ---
                 svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
                 svgClone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
-                
-                // Add the color bar to the SVG so it's included in the export
+
+                // --- Add Color Bar elements to the clone ---
                 const colorBar = document.querySelector('.color-bar');
                 const colorBarLabels = document.querySelector('.color-bar-labels');
-                
-                // We'll need to include these elements in our SVG
+                let colorBarRequiredWidth = 0;
+                let colorBarRequiredHeight = 0;
+
                 if (colorBar && colorBarLabels) {
-                    // Create a style element to preserve the CSS
-                    const styleElement = document.createElement('style');
-                    styleElement.textContent = `
-                        .export-color-bar {
-                            fill: url(#export-color-gradient);
-                            stroke: #ccc;
-                            stroke-width: 1px;
-                        }
-                    `;
-                    svgClone.appendChild(styleElement);
-                    
-                    // Add a gradient definition
-                    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-                    const linearGradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
-                    linearGradient.setAttribute('id', 'export-color-gradient');
-                    linearGradient.setAttribute('x1', '0%');
-                    linearGradient.setAttribute('y1', '0%');
-                    linearGradient.setAttribute('x2', '0%');
-                    linearGradient.setAttribute('y2', '100%');
-                    
-                    // Get computed background from the colorBar
-                    const computedStyle = window.getComputedStyle(colorBar);
-                    const backgroundImage = computedStyle.backgroundImage;
-                    
-                    // Get colors for the current palette
-                    const colorScale = d3.scaleSequential(colorPalettes[selectedColorPalette]);
-                    const [minDomain, maxDomain] = colorScale.domain();
-                    
-                    // Create gradient stops
-                    const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-                    stop1.setAttribute('offset', '0%');
-                    stop1.setAttribute('stop-color', colorScale(maxDomain));
-                    
-                    const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-                    stop2.setAttribute('offset', '100%');
-                    stop2.setAttribute('stop-color', colorScale(minDomain));
-                    
-                    linearGradient.appendChild(stop1);
-                    linearGradient.appendChild(stop2);
-                    defs.appendChild(linearGradient);
-                    svgClone.appendChild(defs);
-                    
-                    // Create a rectangle with the gradient
-                    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-                    rect.setAttribute('class', 'export-color-bar');
-                    rect.setAttribute('x', '10');
-                    rect.setAttribute('y', '20');
-                    rect.setAttribute('width', '20');
-                    rect.setAttribute('height', '200');
-                    
-                    // Add it to the SVG
-                    svgClone.appendChild(rect);
-                    
-                    // Add labels
+                    const colorBarX = 10; const colorBarY = 20; const colorBarRectWidth = 20; const colorBarRectHeight = 200; const labelX = 35; let maxLabelWidth = 0;
+                    // Add style & defs
+                    const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style'); styleElement.textContent = `.export-color-bar-rect { fill: url(#export-color-gradient); stroke: #ccc; stroke-width: 1px; } .export-color-bar-label { font-family: sans-serif; font-size: 10px; dominant-baseline: middle; }`; svgClone.insertBefore(styleElement, svgClone.firstChild);
+                    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs'); const linearGradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient'); linearGradient.setAttribute('id', 'export-color-gradient'); linearGradient.setAttribute('x1', '0%'); linearGradient.setAttribute('y1', '0%'); linearGradient.setAttribute('x2', '0%'); linearGradient.setAttribute('y2', '100%'); const colorScale = d3.scaleSequential(colorPalettes[selectedColorPalette]); const [minDomain, maxDomain] = colorScale.domain(); const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop'); stop1.setAttribute('offset', '0%'); stop1.setAttribute('stop-color', colorScale(maxDomain)); const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop'); stop2.setAttribute('offset', '100%'); stop2.setAttribute('stop-color', colorScale(minDomain)); linearGradient.appendChild(stop1); linearGradient.appendChild(stop2); defs.appendChild(linearGradient); svgClone.insertBefore(defs, svgClone.firstChild);
+                    // Add rect
+                    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect'); rect.setAttribute('class', 'export-color-bar-rect'); rect.setAttribute('x', colorBarX); rect.setAttribute('y', colorBarY); rect.setAttribute('width', colorBarRectWidth); rect.setAttribute('height', colorBarRectHeight); svgClone.appendChild(rect);
+                    // Add labels & measure width
                     const labels = Array.from(colorBarLabels.querySelectorAll('.color-bar-label'));
-                    labels.forEach(label => {
-                        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                        text.setAttribute('x', '35');
-                        text.setAttribute('y', parseFloat(label.style.top) / 100 * 200 + 20);
-                        text.setAttribute('font-size', '10px');
-                        text.textContent = label.textContent;
-                        svgClone.appendChild(text);
-                    });
+                    const tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg"); tempSvg.style.position = 'absolute'; tempSvg.style.visibility = 'hidden'; document.body.appendChild(tempSvg);
+                    labels.forEach(label => { const text = document.createElementNS('http://www.w3.org/2000/svg', 'text'); const yPos = (parseFloat(label.style.top) / 100 * colorBarRectHeight) + colorBarY; text.setAttribute('class', 'export-color-bar-label'); text.setAttribute('x', labelX); text.setAttribute('y', yPos); text.textContent = label.textContent; svgClone.appendChild(text); const tempText = text.cloneNode(true); tempText.setAttribute('style', 'font-family: sans-serif; font-size: 10px;'); tempSvg.appendChild(tempText); try { maxLabelWidth = Math.max(maxLabelWidth, tempText.getBBox().width); } catch(e){ console.warn("Label BBox failed", e);} tempSvg.innerHTML = ''; }); document.body.removeChild(tempSvg);
+
+                    // Calculate space needed JUST for the color bar
+                    colorBarRequiredWidth = labelX + maxLabelWidth + 5; // pos + width + padding
+                    colorBarRequiredHeight = colorBarY + colorBarRectHeight + 5; // pos + height + padding
                 }
-                
-                // Convert to a string
+
+                // --- Adjust final size ONLY IF color bar exceeds current dimensions ---
+                // Get the width/height that were set by applyZoom and copied during clone
+                let finalWidth = parseFloat(svgClone.getAttribute('width')) || 600; // Fallback width
+                let finalHeight = parseFloat(svgClone.getAttribute('height')) || 400; // Fallback height
+
+                // Ensure the canvas is large enough for the color bar
+                finalWidth = Math.max(finalWidth, colorBarRequiredWidth);
+                finalHeight = Math.max(finalHeight, colorBarRequiredHeight);
+
+                 // Add some overall padding
+                 const padding = 15;
+                 finalWidth += padding;
+                 finalHeight += padding;
+
+
+                // --- Set final dimensions on the clone ---
+                // We DO NOT set viewBox. The width/height define the output size.
+                svgClone.setAttribute('width', finalWidth);
+                svgClone.setAttribute('height', finalHeight);
+
+                // --- Serialize and Download ---
                 const serializer = new XMLSerializer();
                 let svgString = serializer.serializeToString(svgClone);
-                
-                // Add title for better filename
                 const title = 'metabolic_tasks_heatmap_' + new Date().toISOString().slice(0, 10);
-                
-                // Create download link
                 const downloadLink = document.createElement('a');
                 downloadLink.href = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgString);
                 downloadLink.download = title + '.svg';
-                
-                // Trigger download
                 document.body.appendChild(downloadLink);
                 downloadLink.click();
                 document.body.removeChild(downloadLink);
-                
-                                    showNotification('SVG file downloaded successfully', 'success', 'bottom-right');
+                showNotification('SVG downloaded.', 'success', 'bottom-right');
+
             } catch (error) {
                 console.error('Error downloading SVG:', error);
                 showNotification('Error downloading SVG: ' + error.message, 'warning', 'bottom-right');
             }
         }
-        
+
         function downloadPNG() {
-            if (!svgElement) {
-                showNotification('No visualization to download. Please select data first.', 'warning');
+            if (!svgElement || !heatmapGroup) {
+                showNotification('No visualization to download.', 'warning');
                 return;
             }
-            
-            try {
-                // Get the SVG element
-                const svgElement = document.querySelector('#heatmap-svg');
-                if (!svgElement) {
-                    showNotification('Could not find SVG element to download', 'warning');
-                    return;
-                }
-                
-                // Create a clone of the SVG to modify
-                const svgClone = svgElement.cloneNode(true);
-                
-                // Make all cells have consistent white borders for export
+             try {
+                // --- Clone the CURRENT state of the interactive SVG ---
+                const originalSvg = document.querySelector('#heatmap-svg');
+                if (!originalSvg) { showNotification('Cannot find SVG element.', 'warning'); return; }
+                const svgClone = originalSvg.cloneNode(true);
+                const groupClone = svgClone.querySelector('g');
+                if (!groupClone) { showNotification('Cannot find SVG group element.', 'warning'); return; }
+
+                // --- Ensure transform is explicitly set on clone's group ---
+                const margin = { top: 150, right: 50, bottom: 50, left: 200 };
+                groupClone.setAttribute('transform', `translate(${margin.left},${margin.top}) scale(${zoomLevel})`);
+
+                // --- Standardize cell borders on the clone ---
                 svgClone.querySelectorAll('.heatmap-cell').forEach(cell => {
-                    // For exports, we want all cells to have white borders
-                    cell.setAttribute('stroke', '#fff');
-                    cell.setAttribute('stroke-width', '1');
+                    cell.setAttribute('stroke', '#fff'); cell.setAttribute('stroke-width', '1');
                 });
-                
-                // Add namespaces and include color bar as in SVG download
                 svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
                 svgClone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
-                
-                // Add the color bar (same code as in SVG download but with current palette)
+
+                // --- Add Color Bar elements to the clone ---
                 const colorBar = document.querySelector('.color-bar');
                 const colorBarLabels = document.querySelector('.color-bar-labels');
-                
-                if (colorBar && colorBarLabels) {
-                    // Create a style element
-                    const styleElement = document.createElement('style');
-                    styleElement.textContent = `
-                        .export-color-bar {
-                            fill: url(#export-color-gradient);
-                            stroke: #ccc;
-                            stroke-width: 1px;
-                        }
-                    `;
-                    svgClone.appendChild(styleElement);
-                    
-                    // Add gradient definition
-                    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-                    const linearGradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
-                    linearGradient.setAttribute('id', 'export-color-gradient');
-                    linearGradient.setAttribute('x1', '0%');
-                    linearGradient.setAttribute('y1', '0%');
-                    linearGradient.setAttribute('x2', '0%');
-                    linearGradient.setAttribute('y2', '100%');
-                    
-                    // Get colors for the current palette
-                    const colorScale = d3.scaleSequential(colorPalettes[selectedColorPalette]);
-                    const [minDomain, maxDomain] = colorScale.domain();
-                    
-                    const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-                    stop1.setAttribute('offset', '0%');
-                    stop1.setAttribute('stop-color', colorScale(maxDomain));
-                    
-                    const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-                    stop2.setAttribute('offset', '100%');
-                    stop2.setAttribute('stop-color', colorScale(minDomain));
-                    
-                    linearGradient.appendChild(stop1);
-                    linearGradient.appendChild(stop2);
-                    defs.appendChild(linearGradient);
-                    svgClone.appendChild(defs);
-                    
-                    // Create rectangle with gradient
-                    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-                    rect.setAttribute('class', 'export-color-bar');
-                    rect.setAttribute('x', '10');
-                    rect.setAttribute('y', '20');
-                    rect.setAttribute('width', '20');
-                    rect.setAttribute('height', '200');
-                    svgClone.appendChild(rect);
-                    
-                    // Add labels
-                    const labels = Array.from(colorBarLabels.querySelectorAll('.color-bar-label'));
-                    labels.forEach(label => {
-                        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                        text.setAttribute('x', '35');
-                        text.setAttribute('y', parseFloat(label.style.top) / 100 * 200 + 20);
-                        text.setAttribute('font-size', '10px');
-                        text.textContent = label.textContent;
-                        svgClone.appendChild(text);
-                    });
-                }
-                
-                // Get the dimensions including all elements (getBBox needs to be called after elements are added)
-                const bbox = svgElement.getBBox();
-                const width = Math.max(svgElement.getAttribute('width'), bbox.width + bbox.x + 100);
-                const height = Math.max(svgElement.getAttribute('height'), bbox.height + bbox.y + 100);
-                
-                // Set dimensions
-                svgClone.setAttribute('width', width);
-                svgClone.setAttribute('height', height);
-                
-                // Convert SVG to a data URL
+                let colorBarRequiredWidth = 0; let colorBarRequiredHeight = 0;
+                 if (colorBar && colorBarLabels) { /* ... (identical logic as in downloadSVG to add elements and calculate required size) ... */
+                    const colorBarX = 10; const colorBarY = 20; const colorBarRectWidth = 20; const colorBarRectHeight = 200; const labelX = 35; let maxLabelWidth = 0;
+                    const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style'); styleElement.textContent = `.export-color-bar-rect { fill: url(#export-color-gradient); stroke: #ccc; stroke-width: 1px; } .export-color-bar-label { font-family: sans-serif; font-size: 10px; dominant-baseline: middle; }`; svgClone.insertBefore(styleElement, svgClone.firstChild);
+                    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs'); const linearGradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient'); linearGradient.setAttribute('id', 'export-color-gradient'); linearGradient.setAttribute('x1', '0%'); linearGradient.setAttribute('y1', '0%'); linearGradient.setAttribute('x2', '0%'); linearGradient.setAttribute('y2', '100%'); const colorScale = d3.scaleSequential(colorPalettes[selectedColorPalette]); const [minDomain, maxDomain] = colorScale.domain(); const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop'); stop1.setAttribute('offset', '0%'); stop1.setAttribute('stop-color', colorScale(maxDomain)); const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop'); stop2.setAttribute('offset', '100%'); stop2.setAttribute('stop-color', colorScale(minDomain)); linearGradient.appendChild(stop1); linearGradient.appendChild(stop2); defs.appendChild(linearGradient); svgClone.insertBefore(defs, svgClone.firstChild);
+                    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect'); rect.setAttribute('class', 'export-color-bar-rect'); rect.setAttribute('x', colorBarX); rect.setAttribute('y', colorBarY); rect.setAttribute('width', colorBarRectWidth); rect.setAttribute('height', colorBarRectHeight); svgClone.appendChild(rect);
+                    const labels = Array.from(colorBarLabels.querySelectorAll('.color-bar-label')); const tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg"); tempSvg.style.position = 'absolute'; tempSvg.style.visibility = 'hidden'; document.body.appendChild(tempSvg);
+                    labels.forEach(label => { const text = document.createElementNS('http://www.w3.org/2000/svg', 'text'); const yPos = (parseFloat(label.style.top) / 100 * colorBarRectHeight) + colorBarY; text.setAttribute('class', 'export-color-bar-label'); text.setAttribute('x', labelX); text.setAttribute('y', yPos); text.textContent = label.textContent; svgClone.appendChild(text); const tempText = text.cloneNode(true); tempText.setAttribute('style', 'font-family: sans-serif; font-size: 10px;'); tempSvg.appendChild(tempText); try { maxLabelWidth = Math.max(maxLabelWidth, tempText.getBBox().width); } catch(e){ console.warn("Label BBox failed", e);} tempSvg.innerHTML = ''; }); document.body.removeChild(tempSvg);
+                    colorBarRequiredWidth = labelX + maxLabelWidth + 5; colorBarRequiredHeight = colorBarY + colorBarRectHeight + 5;
+                 }
+
+                 // --- Adjust final size ---
+                let finalWidth = parseFloat(svgClone.getAttribute('width')) || 600;
+                let finalHeight = parseFloat(svgClone.getAttribute('height')) || 400;
+                finalWidth = Math.max(finalWidth, colorBarRequiredWidth);
+                finalHeight = Math.max(finalHeight, colorBarRequiredHeight);
+                const padding = 15;
+                finalWidth += padding;
+                finalHeight += padding;
+
+                // --- Set final dimensions on the clone ---
+                svgClone.setAttribute('width', finalWidth);
+                svgClone.setAttribute('height', finalHeight);
+                // NO viewBox set
+
+                // --- Convert to PNG ---
                 const serializer = new XMLSerializer();
                 const svgString = serializer.serializeToString(svgClone);
-                const svgBlob = new Blob([svgString], {type: 'image/svg+xml;charset=utf-8'});
-                const url = URL.createObjectURL(svgBlob);
-                
-                // Create a canvas with appropriate size
+                const svgDataUrl = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgString)));
+
                 const canvas = document.createElement('canvas');
-                // Scale up for better quality
-                const scale = 2;
-                canvas.width = width * scale;
-                canvas.height = height * scale;
+                const scale = 2; // Render at higher resolution
+                canvas.width = finalWidth * scale;
+                canvas.height = finalHeight * scale;
                 const ctx = canvas.getContext('2d');
-                
-                // Fill with white background
-                ctx.fillStyle = 'white';
+                ctx.fillStyle = 'white'; // Background color for PNG
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                // Create image from SVG
+
                 const img = new Image();
                 img.onload = function() {
-                    // Draw image scaled up for better resolution
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    
-                    // Create download link
                     try {
                         const pngUrl = canvas.toDataURL('image/png');
                         const downloadLink = document.createElement('a');
                         downloadLink.href = pngUrl;
                         downloadLink.download = 'metabolic_tasks_heatmap_' + new Date().toISOString().slice(0, 10) + '.png';
-                        
                         document.body.appendChild(downloadLink);
                         downloadLink.click();
                         document.body.removeChild(downloadLink);
-                        
-                        // Clean up
-                        URL.revokeObjectURL(url);
-                        
-                        showNotification('PNG file downloaded successfully', 'success', 'bottom-right');
-                    } catch (error) {
-                        console.error('Error creating PNG data URL:', error);
-                        showNotification('Error creating PNG: ' + error.message, 'warning', 'bottom-right');
-                    }
+                        showNotification('PNG downloaded.', 'success', 'bottom-right');
+                    } catch (error) { console.error('Error creating PNG:', error); showNotification('Error creating PNG: ' + error.message, 'warning', 'bottom-right'); }
                 };
-                
-                img.onerror = function(error) {
-                    console.error('Error loading SVG into image:', error);
-                    showNotification('Error converting SVG to PNG', 'warning', 'bottom-right');
-                    URL.revokeObjectURL(url);
-                };
-                
-                img.src = url;
+                img.onerror = function(error) { console.error('Error loading SVG data URL:', error); showNotification('Error converting SVG to PNG.', 'warning', 'bottom-right'); };
+                img.src = svgDataUrl;
+
             } catch (error) {
                 console.error('Error downloading PNG:', error);
                 showNotification('Error downloading PNG: ' + error.message, 'warning', 'bottom-right');
             }
         }
-        
+
         // New function to download the CZI CELLxGENE dataset
         function downloadCziDataset() {
-            // Create a zip of both files
-            // For now, just download the melted data as it's usually the main file of interest
+            // Just download the melted data
             fetch(CZI_MELTED_DATA_URL)
                 .then(response => response.text())
                 .then(csv => {
-                    const blob = new Blob([csv], { type: 'text/csv' });
+                    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); // Add charset
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = url;
@@ -1212,7 +1183,6 @@
                     a.click();
                     document.body.removeChild(a);
                     URL.revokeObjectURL(url);
-                    
                     showNotification('Dataset downloaded successfully', 'success', 'bottom-right');
                 })
                 .catch(error => {
@@ -1220,36 +1190,15 @@
                     showNotification('Error downloading dataset: ' + error.message, 'warning', 'bottom-right');
                 });
         }
-        
-        function applyZoom() {
-            if (svgElement && heatmapGroup) {
-                const margin = { top: 150, right: 50, bottom: 50, left: 200 };
-                heatmapGroup.attr('transform', `translate(${margin.left},${margin.top}) scale(${zoomLevel})`);
-            }
-        }
-        
+
         // Event Listeners
         browseFilesBtn.addEventListener('click', () => fileUploadInput.click());
         fileUploadInput.addEventListener('change', handleFileUpload);
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.classList.add('active');
-        });
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.classList.remove('active');
-        });
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.classList.remove('active');
-            handleFileUpload({ target: { files: e.dataTransfer.files } });
-        });
-        
-        // Add listener for the Load CZI CELLxGENE button
+        uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.classList.add('active'); });
+        uploadArea.addEventListener('dragleave', () => { uploadArea.classList.remove('active'); });
+        uploadArea.addEventListener('drop', (e) => { e.preventDefault(); uploadArea.classList.remove('active'); handleFileUpload({ target: { files: e.dataTransfer.files } }); });
         loadCziDataBtn.addEventListener('click', loadCziCellGeneData);
-        
-        // Add listener for the Download Dataset button
         downloadDatasetBtn.addEventListener('click', downloadCziDataset);
-        
         tissueFilter.addEventListener('change', updateFilters);
         cellTypeFilter.addEventListener('change', updateFilters);
         taskFilter.addEventListener('change', updateFilters);
@@ -1259,76 +1208,30 @@
         taskSearch.addEventListener('input', filterTaskOptions);
         scaleValuesCheckbox.addEventListener('change', updateScaledValues);
         minmaxTaskFilter.addEventListener('input', filterMinMaxTable);
-        
-        // Color palette change event listener
-        colorPaletteSelect.addEventListener('change', function() {
-            selectedColorPalette = this.value;
-            updateHeatmap();
-        });
-        
+        colorPaletteSelect.addEventListener('change', function() { selectedColorPalette = this.value; updateHeatmap(); });
+
         // Function to load CZI CELLxGENE data
         function loadCziCellGeneData() {
-            // Show loading indicator
             const loadingItem = document.createElement('div');
             loadingItem.className = 'alert alert-info d-flex justify-content-between align-items-center';
-            loadingItem.innerHTML = `
-                <span><i class="fas fa-database me-2"></i>Loading CZI CELLxGENE data...</span>
-                <div class="spinner-border spinner-border-sm text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-            `;
-            uploadedFilesList.innerHTML = '';
-            uploadedFilesList.appendChild(loadingItem);
+            loadingItem.innerHTML = `<span><i class="fas fa-database me-2"></i>Loading CZI CELLxGENE data...</span><div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div>`;
+            uploadedFilesList.innerHTML = ''; uploadedFilesList.appendChild(loadingItem);
 
-            // Load both datasets
             Promise.all([
-                fetch(CZI_MELTED_DATA_URL).then(response => {
-                    if (!response.ok) {
-                        throw new Error(`Network error: ${response.status} ${response.statusText}`);
-                    }
-                    return response.text();
-                }),
-                fetch(CZI_MINMAX_DATA_URL).then(response => {
-                    if (!response.ok) {
-                        throw new Error(`Network error: ${response.status} ${response.statusText}`);
-                    }
-                    return response.text();
-                })
+                fetch(CZI_MELTED_DATA_URL).then(response => response.ok ? response.text() : Promise.reject(`Network error: ${response.status} ${response.statusText}`)),
+                fetch(CZI_MINMAX_DATA_URL).then(response => response.ok ? response.text() : Promise.reject(`Network error: ${response.status} ${response.statusText}`))
             ]).then(([meltedCsv, minMaxCsv]) => {
-                // Check if we got valid data
-                if (!meltedCsv || typeof meltedCsv !== 'string') {
-                    throw new Error('Invalid melted data response');
-                }
-                if (!minMaxCsv || typeof minMaxCsv !== 'string') {
-                    throw new Error('Invalid min/max data response');
-                }
+                if (!meltedCsv || typeof meltedCsv !== 'string') { throw new Error('Invalid melted data response'); }
+                if (!minMaxCsv || typeof minMaxCsv !== 'string') { throw new Error('Invalid min/max data response'); }
 
-                // Parse the CSVs
-                const meltedResults = Papa.parse(meltedCsv, {
-                    header: true,
-                    dynamicTyping: true,
-                    skipEmptyLines: true
-                });
+                const meltedResults = Papa.parse(meltedCsv, { header: true, dynamicTyping: true, skipEmptyLines: true });
+                const minMaxResults = Papa.parse(minMaxCsv, { header: true, dynamicTyping: true, skipEmptyLines: true });
 
-                const minMaxResults = Papa.parse(minMaxCsv, {
-                    header: true,
-                    dynamicTyping: true,
-                    skipEmptyLines: true
-                });
+                if (!meltedResults.data || !meltedResults.meta?.fields) { throw new Error('Failed to parse melted data CSV'); }
+                if (!minMaxResults.data || !minMaxResults.meta?.fields) { throw new Error('Failed to parse min/max data CSV'); }
 
-                // Check if parsing was successful
-                if (!meltedResults.data || !meltedResults.meta || !meltedResults.meta.fields) {
-                    throw new Error('Failed to parse melted data CSV');
-                }
+                processMeltedData(meltedResults.data); // Includes string conversion fix
 
-                if (!minMaxResults.data || !minMaxResults.meta || !minMaxResults.meta.fields) {
-                    throw new Error('Failed to parse min/max data CSV');
-                }
-
-                // Process the melted data
-                processMeltedData(meltedResults.data);
-
-                // Check if MinMax data needs to be transposed - THIS IS THE FIX
                 const shouldTranspose = determineIfTransposeNeeded(minMaxResults);
                 if (shouldTranspose) {
                     const transposed = transposeCSV(minMaxResults.data, minMaxResults.meta.fields);
@@ -1336,72 +1239,38 @@
                 } else {
                     processMinMaxData(minMaxResults.data, minMaxResults.meta.fields);
                 }
-
-                // Update UI
                 updateUI();
-
-                // Update loading indicator
-                loadingItem.innerHTML = `
-                    <span><i class="fas fa-check-circle text-success me-2"></i>CZI CELLxGENE data loaded successfully</span>
-                `;
-
+                loadingItem.innerHTML = `<span><i class="fas fa-check-circle text-success me-2"></i>CZI CELLxGENE data loaded successfully</span>`;
                 showNotification('CZI CELLxGENE data loaded successfully', 'success', 'bottom-right');
             }).catch(error => {
                 console.error('Error loading CZI CELLxGENE data:', error);
-
-                // Update loading indicator to show error
-                loadingItem.innerHTML = `
-                    <span><i class="fas fa-times-circle text-danger me-2"></i>Error loading CZI CELLxGENE data: ${error.message}</span>
-                `;
-
-                showNotification('Error loading CZI CELLxGENE data: ' + error.message, 'warning', 'bottom-right');
+                loadingItem.innerHTML = `<span><i class="fas fa-times-circle text-danger me-2"></i>Error loading CZI CELLxGENE data: ${error.message || error}</span>`;
+                showNotification('Error loading CZI CELLxGENE data: ' + (error.message || error), 'warning', 'bottom-right');
             });
         }
-        
-        // Functions
+
+        // File Upload Handling
         function handleFileUpload(event) {
-            const files = event.target.files;
-            if (!files || files.length === 0) return;
-            
-            // Clear uploaded files list
+            const files = event.target.files; if (!files || files.length === 0) return;
             uploadedFilesList.innerHTML = '';
-            
-            // Process each file
+
             Array.from(files).forEach(file => {
                 if (file.type !== 'text/csv' && !file.name.endsWith('.csv')) {
-                    showNotification('Please upload CSV files only.', 'warning', 'bottom-right');
-                    return;
+                    showNotification('Please upload CSV files only.', 'warning', 'bottom-right'); return;
                 }
-                
                 const fileItem = document.createElement('div');
                 fileItem.className = 'alert alert-info d-flex justify-content-between align-items-center';
-                fileItem.innerHTML = `
-                    <span><i class="fas fa-file-csv me-2"></i>${file.name}</span>
-                    <div class="spinner-border spinner-border-sm text-primary" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                `;
+                fileItem.innerHTML = `<span><i class="fas fa-file-csv me-2"></i>${file.name}</span><div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div>`;
                 uploadedFilesList.appendChild(fileItem);
-                
-                // Parse CSV file
+
                 Papa.parse(file, {
-                    header: true,
-                    dynamicTyping: true,
-                    skipEmptyLines: true,
+                    header: true, dynamicTyping: true, skipEmptyLines: true,
                     complete: results => {
-                        // Update spinner to checkmark
                         fileItem.querySelector('.spinner-border').outerHTML = '<i class="fas fa-check-circle text-success"></i>';
-                        
-                        // Determine file type and process accordingly
-                        if (results.meta.fields.includes('metabolic_task') && 
-                            results.meta.fields.includes('tissue') && 
-                            results.meta.fields.includes('cell_type')) {
-                            // This is a Melted Results file with the main data
-                            processMeltedData(results.data);
-                            showNotification(`Successfully processed ${file.name} as Melted Results data.`, 'success', 'bottom-right');
-                        } else if (results.meta.fields.length > 5) {
-                            // This is likely a MinMax file with thresholds
-                            // For MinMax data, check if we need to transpose
+                        if (results.meta?.fields?.includes('metabolic_task') && results.meta.fields.includes('tissue') && results.meta.fields.includes('cell_type')) {
+                            processMeltedData(results.data); // Includes string conversion fix
+                            showNotification(`Processed ${file.name} as Melted Results.`, 'success', 'bottom-right');
+                        } else if (results.meta?.fields?.length > 5) { // Heuristic for MinMax
                             const shouldTranspose = determineIfTransposeNeeded(results);
                             if (shouldTranspose) {
                                 const transposed = transposeCSV(results.data, results.meta.fields);
@@ -1409,12 +1278,11 @@
                             } else {
                                 processMinMaxData(results.data, results.meta.fields);
                             }
-                            showNotification(`Successfully processed ${file.name} as Min/Max data.`, 'success', 'bottom-right');
+                            showNotification(`Processed ${file.name} as Min/Max data.`, 'success', 'bottom-right');
                         } else {
-                            showNotification(`Could not determine the format of ${file.name}.`, 'warning', 'bottom-right');
+                            showNotification(`Could not determine format of ${file.name}. Required columns missing or too few columns.`, 'warning', 'bottom-right');
+                            fileItem.querySelector('.fa-check-circle').outerHTML = '<i class="fas fa-exclamation-triangle text-warning"></i>'; // Show warning icon
                         }
-                        
-                        // Update UI
                         updateUI();
                     },
                     error: error => {
@@ -1424,686 +1292,506 @@
                 });
             });
         }
-        
+
+        // Helper to check if MinMax needs transposing
         function determineIfTransposeNeeded(results) {
-            // Check if first column is likely a row identifier
+            if (!results.meta?.fields || results.data.length === 0) return false;
             const firstColumnName = results.meta.fields[0];
             const firstColumnValues = results.data.map(row => row[firstColumnName]);
-            
-            // If first column contains keywords like 'min', 'max', etc.
-            const minMaxKeywords = ['min', 'max', 'mean', 'median', 'average', 'std'];
-            const containsMinMaxKeywords = firstColumnValues.some(value => 
-                minMaxKeywords.some(keyword => 
-                    value && String(value).toLowerCase().includes(keyword)
-                )
-            );
-            
-            return containsMinMaxKeywords;
+            const minMaxKeywords = ['min', 'max', 'mean', 'median', 'average', 'std', 'threshold']; // Added threshold
+            return firstColumnValues.some(value => minMaxKeywords.some(keyword => value && String(value).toLowerCase().includes(keyword)));
         }
-        
+
+        // Helper to transpose CSV data
         function transposeCSV(data, fields) {
-            // Get the first column name (usually a descriptor)
+            if (!fields || fields.length === 0 || data.length === 0) return { data: [], fields: [] };
             const firstColumnName = fields[0];
-            
-            // Extract row identifiers from the first column
-            const rowIdentifiers = data.map(row => row[firstColumnName]);
-            
-            // Create new fields (columns) for transposed data
-            // First column will be 'Metabolic Task'
+            const rowIdentifiers = data.map(row => String(row[firstColumnName])); // Ensure strings
             const newFields = ['Metabolic Task', ...rowIdentifiers];
-            
-            // Create transposed data structure
             const transposedData = [];
-            
-            // For each field except the first one (which becomes row identifiers)
             for (let i = 1; i < fields.length; i++) {
                 const taskName = fields[i];
                 const newRow = { 'Metabolic Task': taskName };
-                
-                // For each original row, create a column in the new data
                 rowIdentifiers.forEach((rowId, index) => {
                     newRow[rowId] = data[index][taskName];
                 });
-                
                 transposedData.push(newRow);
             }
-            
             return { data: transposedData, fields: newFields };
         }
-        
+
+        // --- Data Processing ---
         function processMeltedData(data) {
-            meltedData = data;
-            
-            // Extract unique values
-            uniqueTasks = [...new Set(data.map(d => d.metabolic_task))].sort();
-            uniqueTissues = [...new Set(data.map(d => d.tissue))].sort();
-            uniqueCellTypes = [...new Set(data.map(d => d.cell_type))].sort();
-            
-            // Group cell types by tissue
-            cellTypesByTissue = {};
-            data.forEach(d => {
-                if (!cellTypesByTissue[d.tissue]) {
-                    cellTypesByTissue[d.tissue] = new Set();
-                }
-                cellTypesByTissue[d.tissue].add(d.cell_type);
-            });
-            
-            // Convert sets to arrays
-            Object.keys(cellTypesByTissue).forEach(tissue => {
-                cellTypesByTissue[tissue] = [...cellTypesByTissue[tissue]].sort();
-            });
-            
-            // Process data for visualization
-            processDataForVisualization();
-        }
-        
-        function processMinMaxData(data, fields) {
-            // Convert data to more usable structure
-            minMaxData = {};
-            
-            // If fields is not provided, extract from the data itself
-            if (!fields && data.length > 0) {
-                fields = Object.keys(data[0]);
-            }
-            
-            // Make sure we have valid fields
-            if (!fields || !Array.isArray(fields) || fields.length < 2) {
-                console.error("Invalid fields for minMax data:", fields);
+            // FIX: Ensure tissue and cell_type are always treated as strings
+            const typeCorrectedData = data.map(row => {
+                const correctedRow = { ...row };
+                if (correctedRow.hasOwnProperty('tissue')) { correctedRow.tissue = String(correctedRow.tissue); }
+                if (correctedRow.hasOwnProperty('cell_type')) { correctedRow.cell_type = String(correctedRow.cell_type); }
+                // Ensure metabolic_task is also a string
+                if (correctedRow.hasOwnProperty('metabolic_task')) { correctedRow.metabolic_task = String(correctedRow.metabolic_task); }
+                return correctedRow;
+            }).filter(row => row.metabolic_task && row.tissue && row.cell_type); // Filter out rows with missing required fields
+
+            meltedData = typeCorrectedData;
+            scaledData = {}; // Reset scaled data when new melted data is processed
+
+            if (meltedData.length === 0) {
+                uniqueTasks = []; uniqueTissues = []; uniqueCellTypes = []; cellTypesByTissue = {};
+                console.warn("No valid rows found in melted data after cleaning.");
+                showNotification("Melted data processed, but no valid rows found (check required columns: tissue, cell_type, metabolic_task).", "warning", "bottom-right");
+                processDataForVisualization(); // Process empty data to clear visuals
                 return;
             }
-            
-            // Extract column names (headers) excluding the task name column
+
+            // Extract unique values (now guaranteed strings)
+            uniqueTasks = [...new Set(meltedData.map(d => d.metabolic_task))].sort((a, b) => a.localeCompare(b));
+            uniqueTissues = [...new Set(meltedData.map(d => d.tissue))].sort((a, b) => a.localeCompare(b));
+            uniqueCellTypes = [...new Set(meltedData.map(d => d.cell_type))].sort((a, b) => a.localeCompare(b));
+
+            // Group cell types by tissue
+            cellTypesByTissue = {};
+            meltedData.forEach(d => {
+                if (!cellTypesByTissue[d.tissue]) { cellTypesByTissue[d.tissue] = new Set(); }
+                cellTypesByTissue[d.tissue].add(d.cell_type);
+            });
+            Object.keys(cellTypesByTissue).forEach(tissue => {
+                cellTypesByTissue[tissue] = [...cellTypesByTissue[tissue]].sort((a, b) => a.localeCompare(b));
+            });
+
+            processDataForVisualization();
+        }
+
+        function processMinMaxData(data, fields) {
+            minMaxData = {};
+            if (!fields && data.length > 0) { fields = Object.keys(data[0]); }
+            if (!fields || !Array.isArray(fields) || fields.length < 2) {
+                 console.error("Invalid fields for minMax data:", fields); return;
+            }
             minMaxHeaders = fields.slice(1);
-            
-            // Update headers in the table
-            updateMinMaxTableHeaders();
-            
-            // Process data
+            updateMinMaxTableHeaders(); // Update table headers first
             data.forEach(row => {
-                const task = row['Metabolic Task'] || row[fields[0]];
+                const taskKey = fields[0]; // Assume first column is the task identifier
+                const task = row[taskKey] ? String(row[taskKey]) : null; // Ensure task is string
                 if (task) {
                     minMaxData[task] = {};
-                    
-                    // For each column in the row (excluding the task name)
-                    minMaxHeaders.forEach(header => {
-                        minMaxData[task][header] = row[header];
-                    });
+                    minMaxHeaders.forEach(header => { minMaxData[task][header] = row[header]; });
                 }
             });
+             // Update table content after processing data
+             updateMinMaxTable();
         }
-        
+
         function updateMinMaxTableHeaders() {
-            // Clear existing headers except the first one
             const headerRow = minmaxTableHeader.querySelector('tr');
-            while (headerRow.children.length > 1) {
-                headerRow.removeChild(headerRow.lastChild);
-            }
-            
-            // Add new headers
+            if (!headerRow) return; // Safety check
+            while (headerRow.children.length > 1) { headerRow.removeChild(headerRow.lastChild); }
             minMaxHeaders.forEach(header => {
-                const th = document.createElement('th');
-                th.textContent = header;
-                headerRow.appendChild(th);
+                const th = document.createElement('th'); th.textContent = header; headerRow.appendChild(th);
             });
         }
-        
-        // FIXED: Improved scaling calculation
+
         function calculateScaledValues() {
-            // Group data by task to min-max scale within each task
+            scaledData = { calculated: false, values: {} }; // Reset
+            if (meltedData.length === 0) return;
+
             const taskGroups = {};
-            
-            // First pass: collect values and find min/max for each task
             meltedData.forEach(row => {
                 const task = row.metabolic_task;
-                if (!taskGroups[task]) {
-                    taskGroups[task] = {
-                        values: [],
-                        min: Infinity,
-                        max: -Infinity
-                    };
-                }
-                
-                const trimean = row.trimean || 0;
-                taskGroups[task].values.push({
-                    key: `${row.tissue}|${row.cell_type}|${task}`,
-                    value: trimean
-                });
-                
-                // Update min and max values for this task
+                if (!task) return; // Skip if task is missing
+                if (!taskGroups[task]) { taskGroups[task] = { values: [], min: Infinity, max: -Infinity }; }
+                const trimean = typeof row.trimean === 'number' ? row.trimean : 0; // Default to 0 if not number
+                const key = `${row.tissue}|${row.cell_type}|${task}`; // Key is string
+                taskGroups[task].values.push({ key, value: trimean });
                 taskGroups[task].min = Math.min(taskGroups[task].min, trimean);
                 taskGroups[task].max = Math.max(taskGroups[task].max, trimean);
             });
-            
-            // Second pass: calculate scaled values
-            scaledData = { calculated: true, values: {} };
-            
+
             Object.keys(taskGroups).forEach(task => {
                 const group = taskGroups[task];
-                const min = group.min;
-                const max = group.max;
+                const min = group.min; const max = group.max;
                 const range = max - min;
-                
                 group.values.forEach(item => {
-                    // Min-max scaling: (x - min) / (max - min)
-                    // This scales values to range [0, 1] for each task separately
-                    const scaledValue = range === 0 ? 
-                        0 : (item.value - min) / range;
-                    
+                    const scaledValue = (range === 0) ? 0 : (item.value - min) / range;
                     scaledData.values[item.key] = scaledValue;
                 });
             });
-            
-            console.log("Scaling completed - scaled values:", Object.keys(scaledData.values).length);
+            scaledData.calculated = true; // Mark as calculated
+            console.log("Scaling calculated for", Object.keys(scaledData.values).length, "entries.");
         }
-        
-        // FIXED: Improved data processing pipeline
+
         function processDataForVisualization() {
-            if (meltedData.length === 0) return;
-            
-            // Filter data based on selection
+             // Ensure meltedData is available
+            if (!meltedData || meltedData.length === 0) {
+                processedData = { tasks: [], tissueCellTypes: [], groupedData: {}, tissueSummaries: {} };
+                console.log("No melted data to process for visualization.");
+                return; // Exit if no base data
+            }
+
+            // Filter data based on selection (string comparisons)
             let filteredData = meltedData;
-            
-            if (selectedTissues.length > 0) {
-                filteredData = filteredData.filter(d => selectedTissues.includes(d.tissue));
-            }
-            
-            if (selectedCellTypes.length > 0) {
-                filteredData = filteredData.filter(d => selectedCellTypes.includes(d.cell_type));
-            }
-            
-            if (selectedTasks.length > 0) {
-                filteredData = filteredData.filter(d => selectedTasks.includes(d.metabolic_task));
-            }
-            
+            if (selectedTissues.length > 0) { filteredData = filteredData.filter(d => selectedTissues.includes(d.tissue)); }
+            if (selectedCellTypes.length > 0) { filteredData = filteredData.filter(d => selectedCellTypes.includes(d.cell_type)); }
+            if (selectedTasks.length > 0) { filteredData = filteredData.filter(d => selectedTasks.includes(d.metabolic_task)); }
             if (searchTerm) {
                 const term = searchTerm.toLowerCase();
-                filteredData = filteredData.filter(d => 
+                filteredData = filteredData.filter(d =>
                     d.metabolic_task.toLowerCase().includes(term) ||
                     d.tissue.toLowerCase().includes(term) ||
                     d.cell_type.toLowerCase().includes(term)
                 );
             }
-            
-            // Apply custom scaling if needed
-            const hasScaledColumn = hasScaledTrimeanColumn();
+
+            // Apply scaling if needed
+            const hasScaledColumn = meltedData[0]?.scaled_trimean !== undefined;
             let dataWithScaling = filteredData;
-            
             if (useScaledValues) {
-                if (!hasScaledColumn && !scaledData.calculated) {
-                    // Calculate scaled values if they haven't been calculated yet
-                    calculateScaledValues();
-                }
-                
+                if (!hasScaledColumn && !scaledData.calculated) { calculateScaledValues(); }
                 if (!hasScaledColumn && scaledData.calculated) {
-                    // Add scaled values to the filtered data
                     dataWithScaling = filteredData.map(row => {
                         const key = `${row.tissue}|${row.cell_type}|${row.metabolic_task}`;
-                        const scaledValue = scaledData.values[key] !== undefined ? 
-                            scaledData.values[key] : 0;
-                        
-                        return {
-                            ...row,
-                            scaled_trimean: scaledValue
-                        };
+                        return { ...row, scaled_trimean: scaledData.values[key] ?? 0 }; // Use calculated value, default 0
                     });
+                } else if (!hasScaledColumn && !scaledData.calculated) {
+                     // Handle case where scaling is requested but cannot be calculated (e.g., no data)
+                     console.warn("Scaled values requested but could not be calculated or found.");
+                     dataWithScaling = filteredData.map(row => ({ ...row, scaled_trimean: 0 })); // Default scaled to 0
                 }
+                 // If hasScaledColumn is true, we assume the data already contains 'scaled_trimean'
             }
-            
-            // Determine tasks to display
-            const tasksToDisplay = selectedTasks.length > 0 ? 
-                selectedTasks : 
-                [...new Set(dataWithScaling.map(d => d.metabolic_task))].sort();
-                
+
+            // Determine tasks and tissue/cell types to display from the *filtered and potentially scaled* data
+             const tasksToDisplay = selectedTasks.length > 0 ? selectedTasks : [...new Set(dataWithScaling.map(d => d.metabolic_task))].sort((a,b) => a.localeCompare(b));
+             const availableTissueCellTypes = [...new Set(dataWithScaling.map(d => `${d.tissue}|${d.cell_type}`))];
+
             // Group data by tissue and cell type
             const groupedData = {};
-            const tissueCellTypes = [];
-            
+            const tissueCellTypes = []; // This will hold {tissue: string, cellType: string} pairs
             dataWithScaling.forEach(d => {
-                const key = `${d.tissue}|${d.cell_type}`;
+                const key = `${d.tissue}|${d.cell_type}`; // String key
                 if (!groupedData[key]) {
                     groupedData[key] = {};
-                    tissueCellTypes.push({ tissue: d.tissue, cellType: d.cell_type });
+                    tissueCellTypes.push({ tissue: d.tissue, cellType: d.cell_type }); // Push strings
                 }
-                
-                // Store the full row data for tooltip
-                groupedData[key][d.metabolic_task] = d;
+                groupedData[key][d.metabolic_task] = d; // Store full row
             });
-            
-            // Sort by tissue, then cell type
-            tissueCellTypes.sort((a, b) => {
-                if (a.tissue !== b.tissue) return a.tissue.localeCompare(b.tissue);
-                return a.cellType.localeCompare(b.cellType);
-            });
-            
-            // Calculate tissue summaries AFTER scaling has been applied
+
+             // Sort tissueCellTypes based on the order in uniqueTissues/uniqueCellTypes if needed, or just localeCompare
+             tissueCellTypes.sort((a, b) => {
+                 const tissueComp = a.tissue.localeCompare(b.tissue);
+                 return tissueComp !== 0 ? tissueComp : a.cellType.localeCompare(b.cellType);
+             });
+
+
+            // Calculate tissue summaries
             const tissueSummaries = {};
-            
             tissueCellTypes.forEach(({ tissue, cellType }) => {
-                if (!tissueSummaries[tissue]) {
-                    tissueSummaries[tissue] = {};
-                }
-                
+                if (!tissueSummaries[tissue]) { tissueSummaries[tissue] = {}; }
                 const key = `${tissue}|${cellType}`;
-                
                 tasksToDisplay.forEach(task => {
-                    if (!tissueSummaries[tissue][task]) {
-                        tissueSummaries[tissue][task] = {
-                            values: [],
-                            scaledValues: [],
-                            count: 0
-                        };
-                    }
-                    
-                    if (groupedData[key] && groupedData[key][task]) {
+                    if (!tissueSummaries[tissue][task]) { tissueSummaries[tissue][task] = { values: [], scaledValues: [], count: 0 }; }
+                    if (groupedData[key]?.[task]) {
                         const row = groupedData[key][task];
-                        tissueSummaries[tissue][task].values.push(row.trimean || 0);
-                        // Use the scaled values that we've calculated
-                        tissueSummaries[tissue][task].scaledValues.push(row.scaled_trimean || 0);
+                        tissueSummaries[tissue][task].values.push(typeof row.trimean === 'number' ? row.trimean : 0);
+                         // Use the scaled value present in the data (either original or calculated)
+                        tissueSummaries[tissue][task].scaledValues.push(typeof row.scaled_trimean === 'number' ? row.scaled_trimean : 0);
                         tissueSummaries[tissue][task].count++;
                     }
                 });
             });
-            
-            // Calculate means for tissue summaries
             Object.keys(tissueSummaries).forEach(tissue => {
                 Object.keys(tissueSummaries[tissue]).forEach(task => {
                     const summary = tissueSummaries[tissue][task];
-                    summary.meanTrimean = summary.values.length > 0 ? 
-                        summary.values.reduce((sum, val) => sum + val, 0) / summary.values.length : 0;
-                    summary.meanScaledTrimean = summary.scaledValues.length > 0 ? 
-                        summary.scaledValues.reduce((sum, val) => sum + val, 0) / summary.scaledValues.length : 0;
+                    const sum = summary.values.reduce((s, v) => s + v, 0);
+                    const scaledSum = summary.scaledValues.reduce((s, v) => s + v, 0);
+                    summary.meanTrimean = summary.count > 0 ? sum / summary.count : 0;
+                    summary.meanScaledTrimean = summary.count > 0 ? scaledSum / summary.count : 0;
                 });
             });
-            
+
             // Store processed data
-            processedData = {
-                tasks: tasksToDisplay,
-                tissueCellTypes,
-                groupedData,
-                tissueSummaries
-            };
+            processedData = { tasks: tasksToDisplay, tissueCellTypes, groupedData, tissueSummaries };
+             console.log("Processed data for visualization:", processedData);
         }
-        
+
+
+        // --- UI Update Functions ---
         function updateUI() {
-            // Update filters
             updateFilterOptions();
-            
-            // Update tree view
             updateTreeView();
-            
-            // Update heatmap
-            updateHeatmap();
-            
-            // Update MinMax table
-            updateMinMaxTable();
+            updateHeatmap(); // This will call applyZoom internally
+            updateMinMaxTable(); // Update min/max table if needed
         }
-        
+
         function updateFilterOptions() {
-            // Clear existing options
-            tissueFilter.innerHTML = '';
-            cellTypeFilter.innerHTML = '';
-            taskFilter.innerHTML = '';
-            
-            // Add "All" option for tissues
-            const allTissueOption = document.createElement('option');
-            allTissueOption.value = "all_tissues";
-            allTissueOption.textContent = "All Tissues";
-            allTissueOption.selected = selectedTissues.length === 0;
-            tissueFilter.appendChild(allTissueOption);
-            
-            // Add tissue options
-            uniqueTissues.forEach(tissue => {
+            tissueFilter.innerHTML = ''; cellTypeFilter.innerHTML = ''; taskFilter.innerHTML = '';
+            const createOption = (value, text, isSelected) => {
                 const option = document.createElement('option');
-                option.value = tissue;
-                option.textContent = tissue;
-                option.selected = selectedTissues.includes(tissue);
-                tissueFilter.appendChild(option);
-            });
-            
-            // Add "All" option for cell types
-            const allCellTypeOption = document.createElement('option');
-            allCellTypeOption.value = "all_cell_types";
-            allCellTypeOption.textContent = "All Cell Types";
-            allCellTypeOption.selected = selectedCellTypes.length === 0;
-            cellTypeFilter.appendChild(allCellTypeOption);
-            
-            // Add cell type options
-            uniqueCellTypes.forEach(cellType => {
-                const option = document.createElement('option');
-                option.value = cellType;
-                option.textContent = cellType;
-                option.selected = selectedCellTypes.includes(cellType);
-                cellTypeFilter.appendChild(option);
-            });
-            
-            // Add "All" option for tasks
-            const allTaskOption = document.createElement('option');
-            allTaskOption.value = "all_tasks";
-            allTaskOption.textContent = "All Metabolic Tasks";
-            allTaskOption.selected = selectedTasks.length === 0;
-            taskFilter.appendChild(allTaskOption);
-            
-            // Add task options
-            uniqueTasks.forEach(task => {
-                const option = document.createElement('option');
-                option.value = task;
-                option.textContent = task;
-                option.selected = selectedTasks.includes(task);
-                taskFilter.appendChild(option);
-            });
+                option.value = value; option.textContent = text; option.selected = isSelected;
+                return option;
+            };
+            // Tissues
+            tissueFilter.appendChild(createOption("all_tissues", "All Tissues", selectedTissues.length === 0));
+            uniqueTissues.forEach(tissue => tissueFilter.appendChild(createOption(tissue, tissue, selectedTissues.includes(tissue))));
+            // Cell Types
+            cellTypeFilter.appendChild(createOption("all_cell_types", "All Cell Types", selectedCellTypes.length === 0));
+            uniqueCellTypes.forEach(cellType => cellTypeFilter.appendChild(createOption(cellType, cellType, selectedCellTypes.includes(cellType))));
+            // Tasks
+            taskFilter.appendChild(createOption("all_tasks", "All Metabolic Tasks", selectedTasks.length === 0));
+            uniqueTasks.forEach(task => taskFilter.appendChild(createOption(task, task, selectedTasks.includes(task))));
+            // Re-filter options based on current search terms
+            filterTissueOptions(); filterCellTypeOptions(); filterTaskOptions();
         }
-        
+
         function updateFilters() {
-            // Get selected values
-            let rawSelectedTissues = Array.from(tissueFilter.selectedOptions).map(option => option.value);
-            let rawSelectedCellTypes = Array.from(cellTypeFilter.selectedOptions).map(option => option.value);
-            let rawSelectedTasks = Array.from(taskFilter.selectedOptions).map(option => option.value);
-            
-            // Handle "All" options
+            let rawSelectedTissues = Array.from(tissueFilter.selectedOptions).map(o => o.value);
+            let rawSelectedCellTypes = Array.from(cellTypeFilter.selectedOptions).map(o => o.value);
+            let rawSelectedTasks = Array.from(taskFilter.selectedOptions).map(o => o.value);
             selectedTissues = rawSelectedTissues.includes("all_tissues") ? [] : rawSelectedTissues;
             selectedCellTypes = rawSelectedCellTypes.includes("all_cell_types") ? [] : rawSelectedCellTypes;
             selectedTasks = rawSelectedTasks.includes("all_tasks") ? [] : rawSelectedTasks;
-            
             searchTerm = searchFilter.value.trim();
-            
-            // Update visualization
-            processDataForVisualization();
-            updateTreeView();
-            updateHeatmap();
+            processDataForVisualization(); // Re-process data based on new filters
+            updateTreeView(); // Update tree based on processed data
+            updateHeatmap(); // Redraw heatmap
         }
-        
-        function filterTissueOptions() {
-            const searchTerm = tissueSearch.value.toLowerCase().trim();
-            
-            // Hide/show options based on search
-            Array.from(tissueFilter.options).forEach(option => {
-                const value = option.value.toLowerCase();
-                const matches = value.includes(searchTerm);
-                option.style.display = matches ? 'block' : 'none';
-            });
+
+        function filterDropdownOptions(selectElement, searchInput) {
+             const searchTerm = searchInput.value.toLowerCase().trim();
+             Array.from(selectElement.options).forEach(option => {
+                 // Always show the "All" option
+                 if (option.value.startsWith("all_")) {
+                     option.style.display = 'block';
+                     return;
+                 }
+                 const value = option.value.toLowerCase();
+                 const matches = value.includes(searchTerm);
+                 option.style.display = matches ? 'block' : 'none';
+             });
         }
-        
-        function filterCellTypeOptions() {
-            const searchTerm = cellTypeSearch.value.toLowerCase().trim();
-            
-            // Hide/show options based on search
-            Array.from(cellTypeFilter.options).forEach(option => {
-                const value = option.value.toLowerCase();
-                const matches = value.includes(searchTerm);
-                option.style.display = matches ? 'block' : 'none';
-            });
-        }
-        
-        function filterTaskOptions() {
-            const searchTerm = taskSearch.value.toLowerCase().trim();
-            
-            // Hide/show options based on search
-            Array.from(taskFilter.options).forEach(option => {
-                const value = option.value.toLowerCase();
-                const matches = value.includes(searchTerm);
-                option.style.display = matches ? 'block' : 'none';
-            });
-        }
-        
+        function filterTissueOptions() { filterDropdownOptions(tissueFilter, tissueSearch); }
+        function filterCellTypeOptions() { filterDropdownOptions(cellTypeFilter, cellTypeSearch); }
+        function filterTaskOptions() { filterDropdownOptions(taskFilter, taskSearch); }
+
+
         function updateScaledValues() {
             useScaledValues = scaleValuesCheckbox.checked;
-            
-            // Check if we need to calculate scaled values
-            if (useScaledValues && !hasScaledTrimeanColumn() && !scaledData.calculated) {
-                calculateScaledValues();
-            }
-            
-            // Update heatmap
-            processDataForVisualization();
-            updateHeatmap();
+            processDataForVisualization(); // Re-process data with new scaling preference
+            updateHeatmap(); // Redraw heatmap with potentially new values/colors
         }
-        
+
         function hasScaledTrimeanColumn() {
-            return meltedData.length > 0 && meltedData[0].scaled_trimean !== undefined;
+            return meltedData.length > 0 && meltedData[0]?.scaled_trimean !== undefined;
         }
-        
+
         function updateTreeView() {
             treeContainer.innerHTML = '';
-            
-            if (!processedData.tissueCellTypes) return;
-            
-            // Group by tissue
-            const tissues = [...new Set(processedData.tissueCellTypes.map(tc => tc.tissue))];
-            
-            // Create tissue nodes
-            tissues.forEach(tissue => {
-                const tissueNode = document.createElement('div');
-                tissueNode.className = 'tree-node tissue-node';
-                tissueNode.dataset.tissue = tissue;
-                tissueNode.dataset.expanded = 'true'; // Default to expanded
-                tissueNode.innerHTML = `
-                    <i class="fas fa-caret-down me-2"></i>
-                    <i class="fas fa-lungs me-1"></i>
-                    <span>${tissue}</span>
-                `;
-                treeContainer.appendChild(tissueNode);
-                
-                // Create cell type nodes for this tissue
-                const cellTypes = processedData.tissueCellTypes
-                    .filter(tc => tc.tissue === tissue)
-                    .map(tc => tc.cellType);
-                
-                const cellTypeContainer = document.createElement('div');
-                cellTypeContainer.className = 'cell-type-container ps-4';
-                cellTypeContainer.dataset.tissue = tissue;
-                cellTypeContainer.style.display = 'block'; // Default to visible
-                
-                cellTypes.forEach(cellType => {
-                    const cellTypeNode = document.createElement('div');
-                    cellTypeNode.className = 'tree-node cell-type-node';
-                    cellTypeNode.dataset.tissue = tissue;
-                    cellTypeNode.dataset.cellType = cellType;
-                    cellTypeNode.innerHTML = `
-                        <i class="fas fa-circle-dot me-1"></i>
-                        <span>${cellType}</span>
-                    `;
-                    cellTypeContainer.appendChild(cellTypeNode);
-                });
-                
-                treeContainer.appendChild(cellTypeContainer);
-                
-                // Add event listener to toggle tissue node
-                tissueNode.addEventListener('click', () => {
-                    const isExpanded = tissueNode.dataset.expanded === 'true';
-                    
-                    // Toggle the caret icon
-                    const caretIcon = tissueNode.querySelector('.fas.fa-caret-down, .fas.fa-caret-right');
-                    caretIcon.classList.toggle('fa-caret-down');
-                    caretIcon.classList.toggle('fa-caret-right');
-                    
-                    // Toggle the expanded state
-                    tissueNode.dataset.expanded = isExpanded ? 'false' : 'true';
-                    
-                    // Toggle the visibility of cell type container
-                    cellTypeContainer.style.display = isExpanded ? 'none' : 'block';
-                    
-                    // Update heatmap
-                    updateHeatmap();
-                });
+            // Use processedData which reflects filtered results
+            if (!processedData.tissueCellTypes || processedData.tissueCellTypes.length === 0) {
+                 treeContainer.innerHTML = '<div class="p-2 text-muted">No tissues/cells match filters.</div>';
+                 return;
+            }
+
+            // Group by tissue from the *filtered* list
+            const tissuesInView = _.groupBy(processedData.tissueCellTypes, 'tissue');
+
+            Object.keys(tissuesInView).sort((a, b) => a.localeCompare(b)).forEach(tissue => {
+                 // Check if tissue node already exists from previous renders (can happen with rapid filtering)
+                 let tissueNode = treeContainer.querySelector(`.tissue-node[data-tissue="${CSS.escape(tissue)}"]`);
+                 let cellTypeContainer = treeContainer.querySelector(`.cell-type-container[data-tissue="${CSS.escape(tissue)}"]`);
+                 let isExpanded = true; // Default to expanded
+
+                 if (tissueNode) {
+                     // Reuse existing node's expanded state if available
+                     isExpanded = tissueNode.dataset.expanded === 'true';
+                 } else {
+                     // Create new tissue node
+                     tissueNode = document.createElement('div');
+                     tissueNode.className = 'tree-node tissue-node';
+                     tissueNode.dataset.tissue = tissue;
+                     tissueNode.dataset.expanded = String(isExpanded);
+                     tissueNode.innerHTML = `<i class="fas ${isExpanded ? 'fa-caret-down' : 'fa-caret-right'} me-2"></i><i class="fas fa-lungs me-1"></i><span>${tissue}</span>`;
+                     treeContainer.appendChild(tissueNode);
+
+                     cellTypeContainer = document.createElement('div');
+                     cellTypeContainer.className = 'cell-type-container ps-4';
+                     cellTypeContainer.dataset.tissue = tissue;
+                     treeContainer.appendChild(cellTypeContainer);
+
+                     // Add event listener only once when creating the node
+                     tissueNode.addEventListener('click', () => {
+                         const currentExpanded = tissueNode.dataset.expanded === 'true';
+                         const caretIcon = tissueNode.querySelector('.fas.fa-caret-down, .fas.fa-caret-right');
+                         tissueNode.dataset.expanded = String(!currentExpanded);
+                         caretIcon.classList.toggle('fa-caret-down', !currentExpanded);
+                         caretIcon.classList.toggle('fa-caret-right', currentExpanded);
+                         cellTypeContainer.style.display = currentExpanded ? 'none' : 'block';
+                         updateHeatmap(); // Redraw heatmap when tree collapses/expands
+                     });
+                 }
+
+                 // Update cell types for this tissue
+                 cellTypeContainer.innerHTML = ''; // Clear previous cell types
+                 cellTypeContainer.style.display = isExpanded ? 'block' : 'none'; // Set visibility based on state
+                 tissuesInView[tissue].map(tc => tc.cellType).sort((a, b) => a.localeCompare(b)).forEach(cellType => {
+                     const cellTypeNode = document.createElement('div');
+                     cellTypeNode.className = 'tree-node cell-type-node';
+                     cellTypeNode.dataset.tissue = tissue;
+                     cellTypeNode.dataset.cellType = cellType;
+                     cellTypeNode.innerHTML = `<i class="fas fa-circle-dot me-1"></i><span>${cellType}</span>`;
+                     cellTypeContainer.appendChild(cellTypeNode);
+                 });
             });
         }
-        
-        // FIXED: Improved heatmap visualization with proper color scaling and now with palette support
+
+        // --- UPDATED updateHeatmap to work with dynamic resizing ---
         function updateHeatmap() {
-            heatmapContainer.innerHTML = '';
-            
-            if (!processedData.tasks || processedData.tasks.length === 0 || 
-                !processedData.tissueCellTypes || processedData.tissueCellTypes.length === 0) {
-                heatmapContainer.innerHTML = '<div class="alert alert-info">No data to display. Please select filters or upload data.</div>';
+            heatmapContainer.innerHTML = ''; // Clear previous heatmap and color bar
+
+            // Use processedData which reflects current filters
+            if (!processedData.tasks || processedData.tasks.length === 0 || !processedData.tissueCellTypes || processedData.tissueCellTypes.length === 0) {
+                heatmapContainer.innerHTML = '<div class="alert alert-info">No data to display for the current selection.</div>';
+                svgElement = null; heatmapGroup = null;
                 return;
             }
-            
-            // Get visible tissues and cell types from tree
+
+            // Get visible rows from the tree structure
             const allRows = [];
-            
-            // Get all tissue nodes
             document.querySelectorAll('.tissue-node').forEach(tissueNode => {
                 const tissue = tissueNode.dataset.tissue;
+                // Check if this tissue is actually in the processed data (could be filtered out)
+                if (!processedData.tissueSummaries[tissue]) return;
+
                 const isExpanded = tissueNode.dataset.expanded === 'true';
-                
-                // Add tissue summary row
-                allRows.push({ 
-                    tissue, 
-                    isSummary: true, 
-                    index: allRows.length 
-                });
-                
-                // If tissue is expanded, add its cell types
+                allRows.push({ tissue, isSummary: true, index: allRows.length });
                 if (isExpanded) {
-                    const cellTypeContainer = document.querySelector(`.cell-type-container[data-tissue="${tissue}"]`);
+                    const cellTypeContainer = document.querySelector(`.cell-type-container[data-tissue="${CSS.escape(tissue)}"]`);
                     if (cellTypeContainer) {
                         cellTypeContainer.querySelectorAll('.cell-type-node').forEach(cellTypeNode => {
-                            allRows.push({
-                                tissue,
-                                cellType: cellTypeNode.dataset.cellType,
-                                index: allRows.length
-                            });
+                             // Check if this cell type is in processed data for this tissue
+                             const key = `${tissue}|${cellTypeNode.dataset.cellType}`;
+                             if(processedData.groupedData[key]) {
+                                 allRows.push({ tissue, cellType: cellTypeNode.dataset.cellType, index: allRows.length });
+                             }
                         });
                     }
                 }
             });
-            
-            // Set up SVG dimensions with increased margins for labels
+
+             if (allRows.length === 0) {
+                 heatmapContainer.innerHTML = '<div class="alert alert-info">No rows to display (expand tissues in the tree or adjust filters).</div>';
+                 svgElement = null; heatmapGroup = null;
+                 return;
+             }
+
+
+            // Set up SVG dimensions based on BASE size (zoomLevel = 1)
             const margin = { top: 150, right: 50, bottom: 50, left: 200 };
-            const cellSize = 30;
-            const width = processedData.tasks.length * cellSize + margin.left + margin.right;
-            const height = allRows.length * cellSize + margin.top + margin.bottom;
-            
-            // Create SVG container with ID for download functions
+            const cellSize = currentCellSize; // Use the global base cell size
+             // Use the actual tasks and rows being displayed for initial size calculation
+            const initialWidth = processedData.tasks.length * cellSize + margin.left + margin.right;
+            const initialHeight = allRows.length * cellSize + margin.top + margin.bottom;
+
+
+            // Create SVG container
             const svg = d3.select('#heatmap-container')
                 .append('svg')
                 .attr('id', 'heatmap-svg')
-                .attr('width', width)
-                .attr('height', height);
-                
-            // Store reference to SVG for zooming
-            svgElement = svg;
-                
-            // Create a group for the entire heatmap that can be zoomed/panned
-            heatmapGroup = svg.append('g')
-                .attr('transform', `translate(${margin.left},${margin.top}) scale(${zoomLevel})`);
-            
-            // Define color scale using the selected palette
+                .attr('width', Math.max(1, initialWidth)) // Ensure non-zero size
+                .attr('height', Math.max(1, initialHeight));
+
+            svgElement = svg; // Store reference
+
+            // Create main group for heatmap content
+            heatmapGroup = svg.append('g');
+            // Initial transform is set by applyZoom called later
+
+
+            // --- Color Scale Calculation ---
             const colorScale = d3.scaleSequential(colorPalettes[selectedColorPalette]);
-            
-            // Set default domain, will adjust based on data usage
-            if (useScaledValues) {
-                // For scaled values, always use 0-1 range since that's what min-max scaling produces
-                colorScale.domain([0, 1]);
-            } else {
-                // For unscaled values, we'll set domain based on data values
-                colorScale.domain([0, 1]); // Initial default, will be updated
-            }
-            
-            // Create heatmap cells
+             // Determine domain based on actual values being displayed
+             const valuesForDomain = [];
+             allRows.forEach((row, rowIndex) => {
+                 processedData.tasks.forEach((task, colIndex) => {
+                     let value;
+                     if (row.isSummary) {
+                         const summary = processedData.tissueSummaries[row.tissue]?.[task];
+                         value = summary ? (useScaledValues ? summary.meanScaledTrimean : summary.meanTrimean) : undefined;
+                     } else {
+                         const key = `${row.tissue}|${row.cellType}`;
+                         const data = processedData.groupedData[key]?.[task];
+                         value = data ? (useScaledValues && data.scaled_trimean !== undefined ? data.scaled_trimean : data.trimean) : undefined;
+                     }
+                     if (typeof value === 'number' && isFinite(value)) { // Check for valid numbers
+                         valuesForDomain.push(value);
+                     }
+                 });
+             });
+
+             if (valuesForDomain.length > 0) {
+                 const minValue = d3.min(valuesForDomain);
+                 const maxValue = d3.max(valuesForDomain);
+                  // Handle single value case for domain
+                  if (minValue === maxValue) {
+                      colorScale.domain([minValue, maxValue + (maxValue === 0 ? 1e-9 : Math.abs(maxValue * 0.01))]); // Add small epsilon
+                  } else {
+                      colorScale.domain([minValue, maxValue]);
+                  }
+             } else {
+                 colorScale.domain([0, 1]); // Default domain if no data
+             }
+
+
+            // --- Cell Data Calculation ---
             const cells = [];
-            
-            // Add cells for all visible rows (tissues and cell types)
             allRows.forEach((row, rowIndex) => {
                 processedData.tasks.forEach((task, colIndex) => {
                     if (row.isSummary) {
-                        // Tissue summary cell
-                        if (!processedData.tissueSummaries[row.tissue] || !processedData.tissueSummaries[row.tissue][task]) {
-                            return;
-                        }
-                        
-                        const summary = processedData.tissueSummaries[row.tissue][task];
-                        const value = useScaledValues ? summary.meanScaledTrimean : summary.meanTrimean;
-                        
-                        cells.push({
-                            row: rowIndex,
-                            col: colIndex,
-                            task,
-                            tissue: row.tissue,
-                            cellType: 'Tissue Summary',
-                            value,
-                            isSummary: true,
-                            data: {
-                                metabolic_task: task,
-                                tissue: row.tissue,
-                                cell_type: 'Tissue Summary',
-                                trimean: summary.meanTrimean,
-                                scaled_trimean: summary.meanScaledTrimean,
-                                n_cells_nonzero: summary.count
-                            }
-                        });
+                         const summary = processedData.tissueSummaries[row.tissue]?.[task];
+                         if (!summary) return;
+                         const value = useScaledValues ? summary.meanScaledTrimean : summary.meanTrimean;
+                         cells.push({ row: rowIndex, col: colIndex, task, tissue: row.tissue, cellType: 'Tissue Summary', value, isSummary: true, data: { metabolic_task: task, tissue: row.tissue, cell_type: 'Tissue Summary', trimean: summary.meanTrimean, scaled_trimean: summary.meanScaledTrimean, n_cells_nonzero: summary.count } });
                     } else {
-                        // Cell type cell
-                        const key = `${row.tissue}|${row.cellType}`;
-                        if (processedData.groupedData[key] && processedData.groupedData[key][task]) {
-                            const data = processedData.groupedData[key][task];
-                            const value = useScaledValues && data.scaled_trimean !== undefined ? 
-                                data.scaled_trimean : data.trimean;
-                            
-                            cells.push({
-                                row: rowIndex,
-                                col: colIndex,
-                                task,
-                                tissue: row.tissue,
-                                cellType: row.cellType,
-                                value,
-                                data
-                            });
-                        }
+                         const key = `${row.tissue}|${row.cellType}`;
+                         const data = processedData.groupedData[key]?.[task];
+                         if (!data) return;
+                         const value = useScaledValues && data.scaled_trimean !== undefined ? data.scaled_trimean : data.trimean;
+                         cells.push({ row: rowIndex, col: colIndex, task, tissue: row.tissue, cellType: row.cellType, value, data });
                     }
                 });
             });
-            
-            // Update color scale domain if not using scaled values
-            if (!useScaledValues && cells.length > 0) {
-                const values = cells.map(cell => cell.value).filter(value => value !== undefined);
-                if (values.length > 0) {
-                    const minValue = d3.min(values);
-                    const maxValue = d3.max(values);
-                    colorScale.domain([minValue, maxValue]);
-                }
-            }
-            
-            // Add color bar with appropriate range based on selected palette
-            const colorBar = document.createElement('div');
-            colorBar.className = 'color-bar';
-            
-            // Set the gradient based on the current color scale domain
-            const [minDomain, maxDomain] = colorScale.domain();
-            colorBar.style.background = `linear-gradient(to bottom, ${colorScale(maxDomain)}, ${colorScale(minDomain)})`;
-            heatmapContainer.appendChild(colorBar);
-            
-            // Add labels for color bar
-            const colorBarLabels = document.createElement('div');
-            colorBarLabels.className = 'color-bar-labels';
-            
-            // Function to format values nicely
-            const formatValue = (val) => {
-                if (Math.abs(val) == 0.0) return val.toFixed(2);
-                if (Math.abs(val) < 0.001) return val.toExponential(2);
-                if (Math.abs(val) < 0.01) return val.toFixed(4);
-                if (Math.abs(val) < 0.1) return val.toFixed(3);
-                if (Math.abs(val) < 1) return val.toFixed(2);
-                if (Math.abs(val) < 10) return val.toFixed(2);
-                return Math.round(val);
-            };
-            
-            // Add 5 labels at equal intervals based on the current domain
-            const steps = 5;
-            for (let i = 0; i < steps; i++) {
-                const percent = i / (steps - 1);
-                const value = maxDomain - percent * (maxDomain - minDomain);
-                
-                const label = document.createElement('div');
-                label.className = 'color-bar-label';
-                label.style.top = `${percent * 100}%`;
-                label.textContent = formatValue(value);
-                colorBarLabels.appendChild(label);
-            }
-            
-            heatmapContainer.appendChild(colorBarLabels);
-            
-            // Draw cells
+
+            // --- Add Color Bar ---
+             const colorBar = document.createElement('div');
+             colorBar.className = 'color-bar';
+             const [minDomain, maxDomain] = colorScale.domain();
+             colorBar.style.background = `linear-gradient(to bottom, ${colorScale(maxDomain)}, ${colorScale(minDomain)})`;
+             heatmapContainer.appendChild(colorBar);
+
+             const colorBarLabels = document.createElement('div');
+             colorBarLabels.className = 'color-bar-labels';
+             const formatValue = (val) => {
+                 if (val === undefined || val === null || !isFinite(val)) return 'N/A'; // Handle non-finite
+                 if (Math.abs(val) < 1e-9) return (0).toFixed(2); // Handle very small numbers as 0
+                 if (Math.abs(val) < 0.001) return val.toExponential(2);
+                 if (Math.abs(val) < 0.01) return val.toFixed(4);
+                 if (Math.abs(val) < 0.1) return val.toFixed(3);
+                 return val.toFixed(2); // Default to 2 decimal places
+             };
+             const steps = 5;
+             for (let i = 0; i < steps; i++) {
+                 const percent = (steps === 1) ? 0.5 : i / (steps - 1); // Avoid division by zero if steps=1
+                 const range = maxDomain - minDomain;
+                 const value = (range === 0) ? minDomain : maxDomain - percent * range;
+                 const label = document.createElement('div');
+                 label.className = 'color-bar-label';
+                 label.style.top = `${percent * 100}%`;
+                 label.textContent = formatValue(value);
+                 colorBarLabels.appendChild(label);
+             }
+             heatmapContainer.appendChild(colorBarLabels);
+
+            // --- Draw Cells inside heatmapGroup ---
+            heatmapGroup.selectAll('.heatmap-cell').remove(); // Clear previous cells first
             heatmapGroup.selectAll('.heatmap-cell')
                 .data(cells)
                 .enter()
@@ -2113,188 +1801,135 @@
                 .attr('y', d => d.row * cellSize)
                 .attr('width', cellSize)
                 .attr('height', cellSize)
-                .attr('fill', d => d.value !== undefined ? colorScale(d.value) : '#eee')
+                 // Ensure fill uses valid number before passing to color scale
+                .attr('fill', d => (typeof d.value === 'number' && isFinite(d.value)) ? colorScale(d.value) : '#eee')
                 .attr('stroke', d => d.isSummary ? '#333' : '#fff')
                 .attr('stroke-width', d => d.isSummary ? 2 : 1)
-                .attr('data-is-summary', d => d.isSummary)  // Add data attribute to track summary cells
+                .attr('data-is-summary', d => d.isSummary)
                 .on('mouseover', function(event, d) {
-                    // Highlight cell
-                    d3.select(this)
-                        .attr('stroke', '#333')
-                        .attr('stroke-width', 2);
-                    
-                    // Update info in the bottom panel
-                    const cellInfo = document.getElementById('cell-info');
-                    
-                    // Clear previous info
-                    cellInfo.innerHTML = '';
-                    
-                    // Add cell information items
+                    d3.select(this).attr('stroke', '#333').attr('stroke-width', 2);
+                    const cellInfo = document.getElementById('cell-info'); cellInfo.innerHTML = '';
                     const addInfoItem = (label, value) => {
-                        if (value !== undefined) {
-                            const item = document.createElement('div');
-                            item.className = 'cell-info-item';
-                            item.innerHTML = `<span class="cell-info-label">${label}:</span> ${value}`;
-                            cellInfo.appendChild(item);
-                        }
+                         const item = document.createElement('div'); item.className = 'cell-info-item';
+                         let displayValue = (value !== undefined && value !== null && isFinite(value)) ? value : 'N/A';
+                         if (typeof displayValue === 'number') { displayValue = formatValue(displayValue); }
+                         item.innerHTML = `<span class="cell-info-label">${label}:</span> ${displayValue}`; cellInfo.appendChild(item);
                     };
-                    
-                    // Add basic info
-                    addInfoItem('Task', d.task);
-                    addInfoItem('Tissue', d.tissue);
-                    addInfoItem('Cell Type', d.cellType);
-                    addInfoItem('Trimean', d.data.trimean?.toFixed(4) || 'N/A');
-                    
-                    // Add additional info if available
-                    if (d.data.scaled_trimean !== undefined) {
-                        addInfoItem('Scaled Trimean', d.data.scaled_trimean.toFixed(4));
-                    }
-                    
-                    if (d.data.variance !== undefined) {
-                        addInfoItem('Variance', d.data.variance.toFixed(4));
-                    }
-                    
-                    if (d.data.std !== undefined) {
-                        addInfoItem('Std Dev', d.data.std.toFixed(4));
-                    }
-                    
-                    if (d.data.n_cells_threshold !== undefined) {
-                        addInfoItem('Cells Threshold', d.data.n_cells_threshold);
-                    }
-                    
-                    if (d.data.n_cells_nonzero !== undefined) {
-                        addInfoItem('Cells Non-Zero', d.data.n_cells_nonzero);
-                    }
-                    
-                    if (d.data.total_cells !== undefined) {
-                        addInfoItem('Total Cells', d.data.total_cells);
-                    }
-                })
-                .on('mouseout', function() {
-                    // Reset cell appearance
-                    d3.select(this)
-                        .attr('stroke', d => d.isSummary ? '#333' : '#fff')
-                        .attr('stroke-width', d => d.isSummary ? 2 : 1);
-                    
-                    // Reset info panel
-                    document.getElementById('cell-info').innerHTML = '<div class="cell-info-item"><span class="cell-info-label">Hover over cells to see details</span></div>';
-                });
-            
-            // Add row labels (tissue and cell type)
+                    addInfoItem('Task', d.task); addInfoItem('Tissue', d.tissue); addInfoItem('Cell Type', d.cellType);
+                    addInfoItem('Value', d.value); // Show the value being plotted
+                    addInfoItem('Trimean', d.data.trimean);
+                    if (d.data.hasOwnProperty('scaled_trimean')) { addInfoItem('Scaled Trimean', d.data.scaled_trimean); }
+                    const optionalCols = ['variance', 'std', 'n_cells_threshold', 'n_cells_nonzero', 'total_cells'];
+                    optionalCols.forEach(col => { if (d.data.hasOwnProperty(col)) { const label = col.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()); addInfoItem(label, d.data[col]); } });
+                 })
+                 .on('mouseout', function() {
+                     d3.select(this).attr('stroke', d => d.isSummary ? '#333' : '#fff').attr('stroke-width', d => d.isSummary ? 2 : 1);
+                     document.getElementById('cell-info').innerHTML = '<div class="cell-info-item"><span class="cell-info-label">Hover over cells to see details</span></div>';
+                 });
+
+            // --- Add Row Labels ---
+            heatmapGroup.selectAll('.row-label').remove(); // Clear previous labels
             heatmapGroup.selectAll('.row-label')
                 .data(allRows)
-                .enter()
-                .append('text')
+                .enter().append('text')
                 .attr('class', 'row-label')
                 .attr('x', -10)
                 .attr('y', (d, i) => i * cellSize + cellSize / 2)
                 .attr('text-anchor', 'end')
                 .attr('alignment-baseline', 'middle')
                 .attr('font-weight', d => d.isSummary ? 'bold' : 'normal')
+                 .style('font-size', '11px') // Make labels slightly smaller
                 .text(d => d.isSummary ? d.tissue : d.cellType);
-            
-            // Properly align labels with reduced spacing
+
+            // --- Add Column Labels ---
+            heatmapGroup.selectAll('.col-label').remove(); // Clear previous labels
             heatmapGroup.selectAll('.col-label')
                 .data(processedData.tasks)
-                .enter()
-                .append('text')
+                .enter().append('text')
                 .attr('class', 'col-label')
-                .attr('transform', (d, i) => {
-                    // Position at the center of the cell, closer to the heatmap
-                    const x = i * cellSize + (cellSize / 2);
-                    const y = -10; // Less space above the heatmap
-                    return `translate(${x}, ${y}) rotate(-45)`;
-                })
-                .attr('text-anchor', 'start') // Start anchor so text extends away from heatmap
+                .attr('transform', (d, i) => { const x = i * cellSize + (cellSize / 2); const y = -10; return `translate(${x}, ${y}) rotate(-45)`; })
+                .attr('text-anchor', 'start')
                 .style('font-size', '11px')
                 .text(d => d);
+
+            // --- Explicitly call applyZoom after everything is drawn ---
+            applyZoom(); // Set the initial size and scale correctly
         }
-        
+
+
         function updateMinMaxTable() {
             minmaxTableBody.innerHTML = '';
-            
             if (!minMaxData || Object.keys(minMaxData).length === 0) {
-                minmaxTableBody.innerHTML = '<tr><td colspan="5">No Min/Max data available. Please upload a Min/Max CSV file.</td></tr>';
+                minmaxTableBody.innerHTML = `<tr><td colspan="${minMaxHeaders.length + 1}">No Min/Max data loaded or available.</td></tr>`;
                 return;
             }
-            
-            // Get search term
             const searchTerm = minmaxTaskFilter.value.toLowerCase().trim();
-            
-            // Filter tasks based on search
-            const tasks = Object.keys(minMaxData).sort();
-            const filteredTasks = searchTerm ? 
-                tasks.filter(task => task.toLowerCase().includes(searchTerm)) : 
-                tasks;
-            
-            // Create rows for each task
+            const tasks = Object.keys(minMaxData).sort((a, b) => a.localeCompare(b));
+            const filteredTasks = searchTerm ? tasks.filter(task => task.toLowerCase().includes(searchTerm)) : tasks;
+
+            if (filteredTasks.length === 0) {
+                 minmaxTableBody.innerHTML = `<tr><td colspan="${minMaxHeaders.length + 1}">No tasks match filter "${searchTerm}".</td></tr>`;
+                 return;
+            }
+
             filteredTasks.forEach(task => {
                 const row = document.createElement('tr');
-                
-                // Task name
-                const taskCell = document.createElement('td');
-                taskCell.textContent = task;
-                row.appendChild(taskCell);
-                
-                // Add cells for each header
+                const taskCell = document.createElement('td'); taskCell.textContent = task; row.appendChild(taskCell);
                 minMaxHeaders.forEach(header => {
                     const cell = document.createElement('td');
-                    if (minMaxData[task] && minMaxData[task][header] !== undefined) {
-                        const value = minMaxData[task][header];
-                        cell.textContent = typeof value === 'number' ? value.toFixed(4) : value;
-                    } else {
-                        cell.textContent = 'N/A';
-                    }
+                    const value = minMaxData[task]?.[header]; // Safely access value
+                    if (value !== undefined && value !== null) {
+                         cell.textContent = typeof value === 'number' ? value.toFixed(4) : value;
+                    } else { cell.textContent = 'N/A'; }
                     row.appendChild(cell);
                 });
-                
                 minmaxTableBody.appendChild(row);
             });
         }
-        
-        function filterMinMaxTable() {
-            updateMinMaxTable();
-        }
-        
+
+        function filterMinMaxTable() { updateMinMaxTable(); }
+
+        // Notification Function
         function showNotification(message, type = 'info', position = 'bottom-right') {
+            const container = document.body; // Or a dedicated notification container
+             // Remove existing alerts of the same type/message to avoid duplicates? Optional.
+             // const existingAlert = container.querySelector(`.alert-${type}[data-message="${message}"]`);
+             // if (existingAlert) existingAlert.remove();
+
             const alertDiv = document.createElement('div');
-            alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
-            
-            // Set different positions based on parameter
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed m-3`; // Added margin
+            // alertDiv.dataset.message = message; // Optional: for duplicate check
+
             if (position === 'upper-center') {
-                // Upper center position
-                alertDiv.style.top = '20px';
-                alertDiv.style.left = '50%';
-                alertDiv.style.transform = 'translateX(-50%)';
-                alertDiv.style.maxWidth = '80%'; // Prevent full width on small screens
+                alertDiv.style.top = '20px'; alertDiv.style.left = '50%'; alertDiv.style.transform = 'translateX(-50%)';
             } else if (position === 'bottom-right') {
-                // Bottom right position (above info panel)
-                alertDiv.style.bottom = '85px'; // Above the 70px info panel with some margin
-                alertDiv.style.right = '20px';
-            } else {
-                // Default upper right (original position)
-                alertDiv.style.top = '20px';
-                alertDiv.style.right = '20px';
+                alertDiv.style.bottom = '80px'; alertDiv.style.right = '20px'; // Adjusted bottom position slightly
+            } else { // Default: top-right
+                alertDiv.style.top = '90px'; alertDiv.style.right = '20px'; // Avoid header overlap
             }
-            
-            alertDiv.style.zIndex = '9999';
-            
-            // Add a max-width for better readability
-            alertDiv.style.maxWidth = '600px';
-            
-            alertDiv.innerHTML = `
-                ${message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            `;
-            
-            document.body.appendChild(alertDiv);
-            
-            // Auto-dismiss after 5 seconds
-            setTimeout(() => {
-                alertDiv.classList.remove('show');
-                setTimeout(() => alertDiv.remove(), 300);
-            }, 5000);
+            alertDiv.style.zIndex = '1050'; // Ensure above most elements but below modals if any
+            alertDiv.style.maxWidth = '90%'; // Limit width on small screens
+             alertDiv.style.width = 'auto'; // Allow content to determine width up to max
+             alertDiv.style.minWidth = '250px'; // Ensure it's reasonably wide
+
+            alertDiv.innerHTML = `${message}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>`;
+            container.appendChild(alertDiv);
+
+            // Auto-dismiss
+             const bsAlert = new bootstrap.Alert(alertDiv); // Get instance for proper dismissal
+             setTimeout(() => {
+                 if (alertDiv.parentNode) { // Check if still in DOM
+                     bsAlert.close();
+                 }
+             }, 5000);
         }
+
+        // Initial setup if needed
+        // document.addEventListener('DOMContentLoaded', () => {
+        //     // You could potentially load default data here if desired
+        //     // loadCziCellGeneData();
+        // });
+
     </script>
 </body>
 </html>
